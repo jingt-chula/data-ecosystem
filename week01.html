@@ -1,0 +1,1210 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <title>Week 01 — Data Thinking for Startups & Innovation | 5602107</title>
+  <link rel="canonical" href="https://jingt-chula.github.io/data-ecosystem/week01.html">
+
+  <!-- Google Identity Services -->
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+
+  <!-- MathJax LaTeX (CHTML with strict inline rendering & startup typeset) -->
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']],
+        processEscapes: true
+      },
+      chtml: {
+        scale: 1.0,
+        displayAlign: 'center'
+      },
+      startup: {
+        pageReady: () => {
+          return MathJax.startup.defaultPageReady();
+        }
+      }
+    };
+  </script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+
+  <!-- jsPDF & Three.js -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+  <style>
+    :root {
+      --bg-canvas: #f5f5f7;
+      --bg-glass: rgba(255, 255, 255, 0.90);
+      --bg-glass-strong: rgba(255, 255, 255, 0.96);
+      --ink-primary: #1d1d1f;
+      --ink-secondary: #515154;
+      --accent-blue: #0071e3;
+      --accent-blue-soft: rgba(0, 113, 227, 0.10);
+      --success: #28cd41;
+      --success-soft: rgba(40, 205, 65, 0.12);
+      --danger: #ff3b30;
+      --danger-soft: rgba(255, 59, 48, 0.12);
+      --warning: #ff9500;
+      --warning-soft: rgba(255, 149, 0, 0.12);
+      --border-hairline: 1px solid rgba(0, 0, 0, 0.09);
+      --shadow-ambient: 0 18px 44px rgba(0, 0, 0, 0.06), 0 1px 3px rgba(0, 0, 0, 0.04);
+      --shadow-card: 0 4px 14px rgba(0, 0, 0, 0.04);
+      --font-display: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Inter", sans-serif;
+      --font-mono: "SF Mono", "JetBrains Mono", Menlo, monospace;
+      --radius-xl: 22px;
+      --radius-md: 14px;
+      --radius-sm: 8px;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+    html, body {
+      margin: 0; padding: 0; width: 100%; min-height: 100%;
+      background-color: var(--bg-canvas); color: var(--ink-primary);
+      font-family: var(--font-display); overflow-x: hidden;
+    }
+
+    /* Strict Inline MathJax Alignment */
+    mjx-container:not([display="true"]),
+    mjx-container[jax="CHTML"]:not([display="true"]),
+    mjx-container[jax="SVG"]:not([display="true"]) {
+      display: inline-block !important;
+      width: auto !important;
+      margin: 0 1px !important;
+      vertical-align: middle;
+    }
+    mjx-container[display="true"] {
+      display: block !important;
+      overflow-x: auto;
+      overflow-y: hidden;
+      margin: 0.35em 0 !important;
+    }
+    .math-nowrap { white-space: nowrap; display: inline-block; }
+
+    #webgl-bg {
+      position: fixed; inset: 0; width: 100vw; height: 100vh;
+      z-index: 0; pointer-events: none;
+    }
+
+    .top-bar {
+      position: sticky; top: 0; z-index: 50;
+      display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px;
+      padding: 10px 18px;
+      background: var(--bg-glass-strong); backdrop-filter: blur(20px) saturate(180%);
+      border-bottom: var(--border-hairline);
+    }
+    .nav-left { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+    .portal-link {
+      text-decoration: none; font-family: var(--font-mono); font-size: 0.74rem; font-weight: 700;
+      color: var(--ink-secondary); background: rgba(0,0,0,0.05); padding: 6px 11px; border-radius: 999px;
+    }
+    .portal-link:hover { color: var(--accent-blue); }
+    .segmented-tabs {
+      display: inline-flex; background: rgba(0, 0, 0, 0.06); padding: 4px; border-radius: 999px; gap: 4px;
+    }
+    .tab-btn {
+      border: none; background: transparent; color: var(--ink-secondary);
+      padding: 7px 15px; border-radius: 999px; font-weight: 600; font-size: 0.83rem; cursor: pointer;
+    }
+    .tab-btn.active { background: #ffffff; color: var(--ink-primary); box-shadow: var(--shadow-card); }
+
+    .hud-pill {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: #ffffff; border: var(--border-hairline); border-radius: 999px;
+      padding: 5px 10px 5px 12px; box-shadow: var(--shadow-card);
+      font-family: var(--font-mono); font-size: 0.72rem; color: var(--ink-secondary);
+    }
+    .hud-score-badge { background: var(--accent-blue-soft); color: var(--accent-blue); font-weight: 700; padding: 2px 8px; border-radius: 999px; }
+    .hud-btn {
+      background: var(--ink-primary); color: #fff; border: none; border-radius: 999px;
+      padding: 5px 11px; font-family: var(--font-display); font-weight: 600; font-size: 0.72rem; cursor: pointer;
+    }
+
+    .instructor-only { display: none !important; }
+    body.instructor-edit-enabled .instructor-only { display: inline-flex !important; }
+
+    [data-editable].editing-active {
+      outline: 2px dashed var(--accent-blue); background: rgba(0, 113, 227, 0.05); border-radius: 6px; padding: 2px 6px;
+    }
+
+    .stage-container {
+      position: relative; z-index: 10; width: 100%; max-width: 1120px;
+      margin: 0 auto; padding: 24px 16px 76px 16px;
+    }
+    .tab-panel { display: none; width: 100%; }
+    .tab-panel.active { display: block; animation: fadeIn 0.24s ease-out; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+
+    .glass-card {
+      background: var(--bg-glass); backdrop-filter: blur(24px) saturate(180%);
+      -webkit-backdrop-filter: blur(24px) saturate(180%);
+      border: var(--border-hairline); border-radius: var(--radius-xl);
+      padding: 1.5rem; box-shadow: var(--shadow-ambient); width: 100%;
+      margin-bottom: 1.25rem; overflow: hidden;
+    }
+    @media (min-width: 860px) {
+      .glass-card { padding: 2rem; }
+      .split-grid {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+        gap: 1.5rem;
+        align-items: start;
+        width: 100%;
+      }
+      .grid-3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1rem; width: 100%; }
+      .grid-4 { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0.85rem; width: 100%; }
+    }
+    @media (max-width: 859px) {
+      .split-grid, .grid-3, .grid-4 { display: flex; flex-direction: column; gap: 1rem; width: 100%; }
+    }
+
+    .eyebrow {
+      display: inline-block; font-family: var(--font-mono); font-size: 0.7rem; font-weight: 700;
+      letter-spacing: 0.05em; text-transform: uppercase; color: var(--accent-blue);
+      background: var(--accent-blue-soft); padding: 4px 10px; border-radius: 999px; margin-bottom: 0.65rem;
+    }
+    h1 { font-size: 1.85rem; font-weight: 800; letter-spacing: -0.03em; margin: 0 0 0.45rem 0; }
+    h2 { font-size: 1.4rem; font-weight: 700; letter-spacing: -0.025em; margin: 0 0 0.45rem 0; }
+    h3 { font-size: 1.05rem; font-weight: 700; letter-spacing: -0.015em; margin: 0 0 0.4rem 0; }
+    p { color: var(--ink-secondary); line-height: 1.55; margin: 0 0 0.85rem 0; }
+
+    .subpill-bar { display: flex; flex-wrap: wrap; gap: 6px; margin: 1rem 0 1.35rem 0; }
+    .subpill-btn {
+      border: var(--border-hairline); background: #ffffff; color: var(--ink-secondary);
+      padding: 6px 13px; border-radius: 999px; font-size: 0.79rem; font-weight: 600; cursor: pointer;
+    }
+    .subpill-btn.active { background: var(--accent-blue); color: #ffffff; border-color: var(--accent-blue); }
+
+    .mini-card {
+      background: #ffffff; border: var(--border-hairline); border-radius: var(--radius-md);
+      padding: 1.05rem 1.15rem; box-shadow: var(--shadow-card);
+      min-width: 0; max-width: 100%; overflow: hidden;
+    }
+    .formula-box {
+      background: #ffffff; border: var(--border-hairline); border-radius: var(--radius-md);
+      padding: 0.85rem 1rem; margin: 0.75rem 0; overflow-x: auto; box-shadow: var(--shadow-card);
+      max-width: 100%;
+    }
+
+    .table-wrap {
+      display: block; width: 100%; max-width: 100%; overflow-x: auto;
+      background: #ffffff; border: var(--border-hairline);
+      border-radius: var(--radius-md); box-shadow: var(--shadow-card);
+    }
+    table { width: 100%; border-collapse: collapse; font-size: 0.8rem; text-align: left; }
+    th {
+      background: #f9f9fb; font-family: var(--font-mono); font-size: 0.7rem; font-weight: 700;
+      color: var(--ink-secondary); padding: 8px 10px; border-bottom: var(--border-hairline); white-space: nowrap;
+    }
+    td { padding: 8px 10px; border-bottom: 1px solid rgba(0,0,0,0.05); white-space: nowrap; }
+    tr.flagged-row { background: var(--danger-soft); }
+    tr.flagged-row td { color: #9e1c14; font-weight: 600; }
+
+    .badge-ok { background: var(--success-soft); color: #167c27; padding: 2px 7px; border-radius: 999px; font-family: var(--font-mono); font-size: 0.68rem; font-weight: 700; }
+    .badge-flag { background: var(--danger-soft); color: #b91c1c; padding: 2px 7px; border-radius: 999px; font-family: var(--font-mono); font-size: 0.68rem; font-weight: 700; }
+    .badge-warn { background: var(--warning-soft); color: #b25e00; padding: 2px 7px; border-radius: 999px; font-family: var(--font-mono); font-size: 0.68rem; font-weight: 700; }
+
+    .code-snippet {
+      background: #1d1d1f; color: #f5f5f7; font-family: var(--font-mono); font-size: 0.72rem;
+      line-height: 1.48; padding: 10px 12px; border-radius: var(--radius-sm);
+      overflow-x: auto; margin: 8px 0 0 0;
+    }
+    .code-tag { color: #5ac8fa; }
+    .code-attr { color: #bf5af2; }
+    .code-str { color: #30d158; }
+    .code-hdr { color: #ff9f0a; font-weight: 700; }
+
+    .unstructured-grid {
+      display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; margin-top: 8px;
+    }
+    .media-tile {
+      background: #f5f5f7; border: 1px solid rgba(0,0,0,0.08); border-radius: var(--radius-sm);
+      padding: 8px 10px; font-size: 0.76rem;
+    }
+    .media-tile-head {
+      display: flex; align-items: center; justify-content: space-between;
+      font-family: var(--font-mono); font-size: 0.68rem; font-weight: 700; color: var(--ink-primary);
+      margin-bottom: 4px;
+    }
+    .wave-bars {
+      display: flex; align-items: flex-end; gap: 2px; height: 18px; margin-top: 4px;
+    }
+    .wave-bars span {
+      display: inline-block; width: 4px; background: var(--accent-blue); border-radius: 2px;
+    }
+
+    .apple-input, .apple-select {
+      width: 100%; max-width: 100%; padding: 9px 12px; margin: 5px 0 10px 0; background: #ffffff;
+      border: 1px solid rgba(0, 0, 0, 0.16); border-radius: var(--radius-sm);
+      font-family: var(--font-mono); font-size: 0.84rem; color: var(--ink-primary);
+    }
+    input[type="range"] { width: 100%; accent-color: var(--accent-blue); margin: 8px 0; }
+    .primary-btn {
+      width: 100%; padding: 12px 18px; background: var(--accent-blue); color: #ffffff;
+      border: none; border-radius: var(--radius-md); font-weight: 600; font-size: 0.9rem; cursor: pointer;
+    }
+    .secondary-btn {
+      padding: 9px 14px; background: #ffffff; color: var(--ink-primary);
+      border: 1px solid rgba(0, 0, 0, 0.15); border-radius: var(--radius-sm);
+      font-weight: 600; font-size: 0.82rem; cursor: pointer;
+    }
+
+    .bar-row { margin-bottom: 12px; }
+    .bar-label { display: flex; justify-content: space-between; font-size: 0.82rem; font-weight: 600; margin-bottom: 4px; }
+    .bar-track { width: 100%; height: 14px; background: rgba(0,0,0,0.06); border-radius: 999px; overflow: hidden; }
+    .bar-fill { height: 100%; background: var(--accent-blue); border-radius: 999px; transition: width 0.3s ease; }
+
+    .mcq-list { display: flex; flex-direction: column; gap: 0.65rem; margin-top: 1rem; }
+    .mcq-btn {
+      display: flex; align-items: flex-start; gap: 12px; width: 100%; padding: 0.88rem 1rem;
+      background: #ffffff; border: 1px solid rgba(0, 0, 0, 0.12); border-radius: var(--radius-md);
+      color: var(--ink-primary); font-size: 0.92rem; line-height: 1.4; text-align: left; cursor: pointer;
+    }
+    .mcq-btn:hover { border-color: var(--accent-blue); }
+    .mcq-btn.correct { border-color: var(--success); background: var(--success-soft); }
+    .mcq-btn.wrong { border-color: var(--danger); background: var(--danger-soft); }
+    .mcq-badge {
+      flex-shrink: 0; font-family: var(--font-mono); font-size: 0.76rem; font-weight: 700;
+      color: var(--accent-blue); background: var(--accent-blue-soft); padding: 3px 8px; border-radius: 6px;
+    }
+    .verdict-text { margin-top: 0.7rem; font-family: var(--font-mono); font-size: 0.8rem; font-weight: 700; min-height: 1.2em; }
+
+    @media print {
+      #webgl-bg, .top-bar, .no-print { display: none !important; }
+      body { background: #ffffff !important; }
+      .stage-container { padding: 0 !important; }
+      .tab-panel { display: none !important; }
+      #panel-quiz { display: block !important; }
+      .glass-card { box-shadow: none !important; border: 1px solid #ccc !important; }
+    }
+  </style>
+</head>
+<body>
+  <!-- Centralized JSON Content Store -->
+  <script type="application/json" id="week-content-data">
+  {
+    "weekId": "WEEK_01",
+    "courseCode": "5602107",
+    "appsScriptUrl": "https://script.google.com/macros/s/AKfycbyOTzwSXa8STHq_TlfSd9LbUxmxoan7ck8rKUbWF-Z90OezK5mXBXPczAAtTjn2JfezAw/exec",
+    "googleSheetUrl": "https://docs.google.com/spreadsheets/d/1_uObrNze7wsiipnf0CkhGJK7DwJhSxk1Z8TvqAPuwlk/edit?usp=sharing",
+    "googleClientId": "",
+    "questions": [
+      {
+        "id": "W01_Q1",
+        "tag": "Checkpoint 01 // Data vs. Insight",
+        "prompt": "A survey logs individual ratings $x_i = 2$, computes a delivery average $\\bar{x} = 3.7$, and triggers switching logistics vendors. What stage is the vendor switch?",
+        "options": [
+          { "text": "Raw data collected directly from customer transaction logs", "correct": false },
+          { "text": "Organized information aggregated into a summary metric", "correct": false },
+          { "text": "Actionable insight driving a concrete operational choice", "correct": true },
+          { "text": "Unstructured telemetry stored without a database schema", "correct": false }
+        ]
+      },
+      {
+        "id": "W01_Q2",
+        "tag": "Checkpoint 02 // Statistical Data Types",
+        "prompt": "In the Event Survey dataset, `Event_ID` (`EVT001`, `EVT002`, `EVT003`) and Likert rating `Satisfaction_Score` ($1$ to $5$) are recorded. How should they be classified?",
+        "options": [
+          { "text": "Event_ID is continuous numeric; Satisfaction_Score is text", "correct": false },
+          { "text": "Event_ID is categorical label; Satisfaction_Score is ordinal", "correct": true },
+          { "text": "Event_ID is ratio numeric; Satisfaction_Score is nominal ID", "correct": false },
+          { "text": "Event_ID is unstructured log; Satisfaction_Score is binary", "correct": false }
+        ]
+      },
+      {
+        "id": "W01_Q3",
+        "tag": "Checkpoint 03 // Storage Schemas",
+        "prompt": "Why does an HTML product page or an email message (with headers like `From:` and `Subject:` plus free-form body text) qualify as semi-structured data?",
+        "options": [
+          { "text": "It enforces strict SQL column types across every single row", "correct": false },
+          { "text": "It contains zero metadata tags and requires computer vision", "correct": false },
+          { "text": "It pairs structural tags or headers with flexible body text", "correct": true },
+          { "text": "It stores binary video frames inside relational tables only", "correct": false }
+        ]
+      },
+      {
+        "id": "W01_Q4",
+        "tag": "Checkpoint 04 // Startup Unit Economics",
+        "prompt": "An e-commerce startup spends $\\$500$ on Social Media ads acquiring $0$ buyers, and $\\$200$ on Referral incentives acquiring $10$ buyers ($\\bar{x} = \\$45$ order). What is the data-driven move?",
+        "options": [
+          { "text": "Double Social Media ad spend to force brand awareness fast", "correct": false },
+          { "text": "Shift marketing budget from Social Media toward Referrals", "correct": true },
+          { "text": "Shut down both acquisition channels and ignore conversion", "correct": false },
+          { "text": "Raise product prices by fifty percent across all channels", "correct": false }
+        ]
+      },
+      {
+        "id": "W01_Q5",
+        "tag": "Checkpoint 05 // Cut-Off Thresholds",
+        "prompt": "A ride-hailing engine triggers a $1.5\\times$ surge multiplier whenever demand-to-supply ratio $R = D/S \\ge \\tau$. If $D = 300$, $S = 40$, and $\\tau = 5.0$, what happens?",
+        "options": [
+          { "text": "No surge is applied because $R = 7.5$ stays below threshold", "correct": false },
+          { "text": "Surge pricing activates because $R = 7.5$ exceeds threshold", "correct": true },
+          { "text": "Driver supply is halved automatically to reduce total trips", "correct": false },
+          { "text": "Base fare drops by twenty percent to attract more riders", "correct": false }
+        ]
+      },
+      {
+        "id": "W01_Q6",
+        "tag": "Checkpoint 06 // Descriptive Statistics",
+        "prompt": "Why should a startup inspect both Median ($\\tilde{x}$) and Standard Deviation ($s$) alongside the Mean ($\\bar{x}$) when evaluating customer ratings?",
+        "options": [
+          { "text": "Because Mean always equals zero whenever sample size exceeds fifty", "correct": false },
+          { "text": "To detect skew from extreme outliers and measure rating consistency", "correct": true },
+          { "text": "Because Excel cannot compute averages on integer columns properly", "correct": false },
+          { "text": "To convert categorical product IDs into continuous ratios cleanly", "correct": false }
+        ]
+      }
+    ]
+  }
+  </script>
+
+  <canvas id="webgl-bg"></canvas>
+
+  <header class="top-bar">
+    <div class="nav-left">
+      <a class="portal-link" href="index.html">&larr; 5602107 Schedule</a>
+      <nav class="segmented-tabs" role="tablist">
+        <button class="tab-btn active" onclick="switchMainTab('lecture', this)">1. Lecture (60m)</button>
+        <button class="tab-btn" onclick="switchMainTab('lab', this)">2. Excel Lab (70m)</button>
+        <button class="tab-btn" onclick="switchMainTab('quiz', this)">3. Concept Quiz (10m)</button>
+      </nav>
+    </div>
+
+    <div class="hud-pill">
+      <span id="hud-name">Guest Student</span>
+      <span class="hud-score-badge" id="hud-score">0 / 6</span>
+      <span id="hud-bkk-clock">BKK --:--</span>
+      <a class="hud-btn instructor-only" href="https://docs.google.com/spreadsheets/d/1_uObrNze7wsiipnf0CkhGJK7DwJhSxk1Z8TvqAPuwlk/edit?usp=sharing" target="_blank" rel="noopener" style="background:#0071e3; text-decoration:none;">Gradebook &nearr;</a>
+      <button class="hud-btn instructor-only" id="btn-toggle-edit" onclick="toggleInstructorEdit()">Edit</button>
+      <button class="hud-btn instructor-only" id="btn-export-html" onclick="exportCleanHtml()">Export HTML</button>
+    </div>
+  </header>
+
+  <main class="stage-container">
+    <!-- ==================== TAB 1: LECTURE ==================== -->
+    <section class="tab-panel active" id="panel-lecture">
+      <div class="glass-card">
+        <div class="eyebrow" data-editable>5602107 // WEEK 01 · 5 JAN 2027 (CLOs 1, 2)</div>
+        <h1 data-editable>Data Thinking for Startups and Innovation</h1>
+        <p data-editable>Raw numbers have zero value on their own. Innovators create value by defining clear conversion events, organizing data into descriptive metrics, applying cut-off thresholds <span class="math-nowrap">($\tau$)</span>, and executing evidence-based decisions.</p>
+
+        <div class="subpill-bar">
+          <button class="subpill-btn active" onclick="switchLectureSub('lec-1', this)">1.1 Data &rarr; Insight &amp; Thresholds</button>
+          <button class="subpill-btn" onclick="switchLectureSub('lec-2', this)">1.2 Core Descriptive Statistics</button>
+          <button class="subpill-btn" onclick="switchLectureSub('lec-3', this)">1.3 Visual Data Types &amp; Schemas</button>
+          <button class="subpill-btn" onclick="switchLectureSub('lec-4', this)">1.4 Startup Simulators &amp; Pipeline</button>
+        </div>
+
+        <!-- SUBVIEW 1.1 -->
+        <div id="lec-1" class="lec-subview">
+          <div class="split-grid">
+            <div style="min-width:0;">
+              <div class="mini-card" style="margin-bottom: 10px;">
+                <span class="eyebrow" style="margin-bottom:4px;">1. DATA (RAW FACTS)</span>
+                <p style="margin:0; font-size:0.88rem;">Unprocessed observations collected from sensors, clicks, or forms. Example: <span class="math-nowrap">$x_i = 3$</span>.</p>
+              </div>
+              <div class="mini-card" style="margin-bottom: 10px;">
+                <span class="eyebrow" style="margin-bottom:4px;">2. INFORMATION (ORGANIZED)</span>
+                <p style="margin:0; font-size:0.88rem;">Grouped, filtered, or summarized metrics. Example: <span class="math-nowrap">$\bar{x} = 3.8 / 5.0$</span>, <span class="math-nowrap">$\tilde{x} = 4.0$</span>.</p>
+              </div>
+              <div class="mini-card" style="border-left: 4px solid var(--accent-blue);">
+                <span class="eyebrow" style="margin-bottom:4px;">3. INSIGHT (ACTIONABLE)</span>
+                <p style="margin:0; font-size:0.88rem;">Interpretation explaining <em>why</em> and triggering a rule: &ldquo;Delivery is lowest <span class="math-nowrap">($\bar{x} = 3.7$)</span>; switch courier.&rdquo;</p>
+              </div>
+
+              <div class="formula-box">
+                <div style="font-family:var(--font-mono); font-size:0.7rem; font-weight:700; color:var(--ink-secondary); margin-bottom:4px;">QUANTITATIVE DECISION RULE</div>
+                $$\text{Decision}(x) = \begin{cases} \text{Trigger Action}, & \text{if } x \ge \tau \\ \text{Normal Monitoring}, & \text{if } x < \tau \end{cases}$$
+              </div>
+            </div>
+
+            <div class="mini-card">
+              <div style="display:flex; justify-content:space-between; align-items:center; gap:8px; flex-wrap:wrap; margin-bottom:8px;">
+                <strong>Domain Threshold Simulator</strong>
+                <select id="domain-select" class="apple-select" style="width:100%; margin:4px 0 0 0; padding:7px 10px;" onchange="renderDomainTable()">
+                  <option value="health">Health: Influenza Outbreak (ILI)</option>
+                  <option value="safety">Safety: Hurricane Wind Speed</option>
+                  <option value="gov">Government: Transit Congestion</option>
+                  <option value="startup">Startup: Feature Bug Triage</option>
+                </select>
+              </div>
+
+              <div style="display:flex; justify-content:space-between; align-items:center; font-size:0.82rem; font-weight:600; margin-top:6px;">
+                <span class="math-nowrap" id="tau-label">Cut-Off Threshold ($\tau$):</span>
+                <span class="hud-score-badge" id="tau-value-display">10</span>
+              </div>
+              <input type="range" id="tau-slider" min="1" max="20" step="1" value="10" oninput="renderDomainTable()">
+
+              <div class="table-wrap" style="margin-top:8px;">
+                <table id="domain-table"></table>
+              </div>
+              <div id="domain-insight-banner" style="margin-top:10px; font-size:0.82rem; font-weight:600; color:var(--accent-blue);"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- SUBVIEW 1.2 -->
+        <div id="lec-2" class="lec-subview" style="display:none;">
+          <h3>Essential Descriptive Statistics for Decision-Making</h3>
+          <p>Relying only on the Mean <span class="math-nowrap">($\bar{x}$)</span> can hide outliers, volatility, and conversion bottlenecks. Always pair center, spread, and proportion metrics:</p>
+
+          <div class="grid-3" style="margin-bottom: 1.1rem;">
+            <div class="mini-card">
+              <div class="eyebrow">1. SAMPLE MEAN ($\bar{x}$)</div>
+              <div class="formula-box" style="margin:6px 0;">$$\bar{x} = \frac{1}{n}\sum_{i=1}^{n} x_i$$</div>
+              <p style="font-size:0.82rem; margin:0;">Arithmetic center of all observations. Sensitive to extreme high or low outliers. Excel: `=AVERAGE(...)`.</p>
+            </div>
+
+            <div class="mini-card">
+              <div class="eyebrow">2. MEDIAN ($\tilde{x}$) &amp; MODE</div>
+              <div class="formula-box" style="margin:6px 0;">$$\tilde{x} = x_{\left(\frac{n+1}{2}\right)}$$</div>
+              <p style="font-size:0.82rem; margin:0;">Middle value ($50\text{th}$ percentile). Robust against skewed ratings or income spikes. Excel: `=MEDIAN(...)`.</p>
+            </div>
+
+            <div class="mini-card">
+              <div class="eyebrow">3. SAMPLE STD DEV ($s$)</div>
+              <div class="formula-box" style="margin:6px 0;">$$s = \sqrt{\frac{1}{n-1}\sum_{i=1}^{n}(x_i - \bar{x})^2}$$</div>
+              <p style="font-size:0.82rem; margin:0;">Measures consistency vs. volatility around <span class="math-nowrap">$\bar{x}$</span>. Low <span class="math-nowrap">$s$</span> = uniform experience. Excel: `=STDEV.S(...)`.</p>
+            </div>
+
+            <div class="mini-card">
+              <div class="eyebrow">4. RANGE &amp; IQR</div>
+              <div class="formula-box" style="margin:6px 0;">$$\text{IQR} = Q_3 - Q_1, \quad \text{Range} = x_{\max} - x_{\min}$$</div>
+              <p style="font-size:0.82rem; margin:0;">Captures the middle $50\%$ spread (<span class="math-nowrap">$Q_1$</span> to <span class="math-nowrap">$Q_3$</span>) without distortion from extreme tails.</p>
+            </div>
+
+            <div class="mini-card">
+              <div class="eyebrow">5. CONVERSION RATE ($\hat{p}$)</div>
+              <div class="formula-box" style="margin:6px 0;">$$\hat{p} = \frac{k}{n} \times 100\%$$</div>
+              <p style="font-size:0.82rem; margin:0;">Proportion of users <span class="math-nowrap">($k$)</span> completing a target event within a fixed window (e.g., 24h purchase).</p>
+            </div>
+
+            <div class="mini-card">
+              <div class="eyebrow">6. CORRELATION ($r$)</div>
+              <div class="formula-box" style="margin:6px 0;">$$r \in [-1, +1]$$</div>
+              <p style="font-size:0.82rem; margin:0;">Direction &amp; strength of linear link between two variables (e.g., Satisfaction vs. Checkout Speed). Excel: `=CORREL(...)`.</p>
+            </div>
+          </div>
+
+          <div class="mini-card" style="background:#f9fbff; border-color: rgba(0, 113, 227, 0.22);">
+            <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+              <div>
+                <strong>Interactive Outlier Impact Explorer: Mean ($\bar{x}$) vs. Median ($\tilde{x}$) vs. Std Dev ($s$)</strong>
+                <p style="font-size:0.82rem; margin:2px 0 0 0;">Base delivery times (mins): `[18, 20, 21, 22, 24]`. Drag the slider to simulate a delayed 6th order <span class="math-nowrap">($x_6$)</span>:</p>
+              </div>
+              <span class="hud-score-badge" id="outlier-x6-badge">6th Order x₆ = 25 mins</span>
+            </div>
+            <input type="range" id="outlier-slider" min="20" max="180" step="5" value="25" oninput="updateOutlierDemo()">
+            <div class="grid-4" style="margin-top:6px;">
+              <div class="mini-card" style="padding:8px 10px;"><div style="font-size:0.68rem; font-family:var(--font-mono); color:var(--ink-secondary);">MEAN ($\bar{x}$)</div><div id="out-mean" style="font-size:1.15rem; font-weight:800; color:var(--accent-blue);">21.7m</div></div>
+              <div class="mini-card" style="padding:8px 10px;"><div style="font-size:0.68rem; font-family:var(--font-mono); color:var(--ink-secondary);">MEDIAN ($\tilde{x}$)</div><div id="out-med" style="font-size:1.15rem; font-weight:800; color:#167c27;">21.5m</div></div>
+              <div class="mini-card" style="padding:8px 10px;"><div style="font-size:0.68rem; font-family:var(--font-mono); color:var(--ink-secondary);">STD DEV ($s$)</div><div id="out-sd" style="font-size:1.15rem; font-weight:800; color:#b25e00;">2.50m</div></div>
+              <div class="mini-card" style="padding:8px 10px;"><div style="font-size:0.68rem; font-family:var(--font-mono); color:var(--ink-secondary);">SKEW GAP ($|\bar{x}-\tilde{x}|$)</div><div id="out-gap" style="font-size:1.15rem; font-weight:800;">0.2m</div></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- SUBVIEW 1.3 -->
+        <div id="lec-3" class="lec-subview" style="display:none;">
+          <h3>Visual Examples: Data Storage Schemas &amp; Variable Types</h3>
+          <p>Modern startups combine rigid database tables (~20%) with HTML/email markup and unstructured multimedia (~80%):</p>
+
+          <div class="grid-3" style="margin-bottom: 1.1rem;">
+            <div class="mini-card">
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+                <span class="badge-ok">1. STRUCTURED (~20%)</span>
+                <span style="font-family:var(--font-mono); font-size:0.68rem; color:var(--ink-secondary);">SQL / Excel</span>
+              </div>
+              <p style="font-size:0.81rem;">Strict rows &amp; typed columns. Every cell obeys a fixed schema (`INT`, `DATE`, `DECIMAL`).</p>
+              <div class="table-wrap">
+                <table>
+                  <thead><tr><th>User_ID</th><th>Age</th><th>Spend</th></tr></thead>
+                  <tbody>
+                    <tr><td>U-101</td><td>21</td><td>$45.00</td></tr>
+                    <tr><td>U-102</td><td>24</td><td>$19.50</td></tr>
+                    <tr><td>U-103</td><td>19</td><td>$62.00</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <div class="mini-card">
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+                <span class="badge-warn">2. SEMI-STRUCTURED</span>
+                <span style="font-family:var(--font-mono); font-size:0.68rem; color:var(--ink-secondary);">HTML / Email</span>
+              </div>
+              <p style="font-size:0.81rem;">Structural tags or metadata headers wrapping flexible human text:</p>
+              <pre class="code-snippet"><span style="color:#8e8e93;">&lt;!-- 1. HTML Web Page --&gt;</span>
+<span class="code-tag">&lt;article</span> <span class="code-attr">data-stars=</span><span class="code-str">"5"</span><span class="code-tag">&gt;</span>
+  <span class="code-tag">&lt;h4&gt;</span>Wireless Earbuds<span class="code-tag">&lt;/h4&gt;</span>
+  <span class="code-tag">&lt;p&gt;</span>Great battery life!<span class="code-tag">&lt;/p&gt;</span>
+<span class="code-tag">&lt;/article&gt;</span>
+
+<span style="color:#8e8e93;">// 2. Email (.eml)</span>
+<span class="code-hdr">From:</span> niran@chula.ac.th
+<span class="code-hdr">Subject:</span> Order #402 Issue
+Hi team, my parcel arrived late...</pre>
+            </div>
+
+            <div class="mini-card">
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+                <span class="badge-flag">3. UNSTRUCTURED (~80%)</span>
+                <span style="font-family:var(--font-mono); font-size:0.68rem; color:var(--ink-secondary);">Multimodal</span>
+              </div>
+              <p style="font-size:0.81rem;">No predefined tags or columns; requires NLP, Vision, or Audio AI to extract features:</p>
+              <div class="unstructured-grid">
+                <div class="media-tile">
+                  <div class="media-tile-head"><span>RAW NOTE</span><span>.txt</span></div>
+                  <div style="color:var(--ink-secondary); font-style:italic;">&ldquo;Battery lasts 12h, bass is crisp!&rdquo;</div>
+                </div>
+                <div class="media-tile">
+                  <div class="media-tile-head"><span>PRODUCT PHOTO</span><span>.jpg</span></div>
+                  <div style="display:flex; gap:4px; align-items:center; margin-top:2px;">
+                    <span style="display:inline-block; width:18px; height:18px; border-radius:4px; background:linear-gradient(135deg,#0071e3,#5ac8fa);"></span>
+                    <span style="font-size:0.7rem; color:var(--ink-secondary);">1080&times;1080 RGB</span>
+                  </div>
+                </div>
+                <div class="media-tile">
+                  <div class="media-tile-head"><span>SUPPORT CALL</span><span>.wav</span></div>
+                  <div class="wave-bars">
+                    <span style="height:6px;"></span><span style="height:14px;"></span><span style="height:10px;"></span><span style="height:18px;"></span><span style="height:8px;"></span><span style="height:15px;"></span><span style="height:7px;"></span>
+                  </div>
+                </div>
+                <div class="media-tile">
+                  <div class="media-tile-head"><span>CCTV STREAM</span><span>.mp4</span></div>
+                  <div style="font-size:0.7rem; color:var(--ink-secondary);">30 fps store foot-traffic video</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="mini-card">
+            <strong>Statistical Variable Classification (Choosing the Right Metric &amp; Chart)</strong>
+            <div class="table-wrap" style="margin-top:8px;">
+              <table>
+                <thead>
+                  <tr><th>Category</th><th>Sub-Type</th><th>Dataset Example</th><th>Valid Operations</th><th>Invalid Mistake</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td><strong>Numerical</strong></td><td>Continuous / Discrete</td><td>`Customer_Age` (`24`), `Checkout_Mins` (`340`)</td><td>Mean (<span class="math-nowrap">$\bar{x}$</span>), Median (<span class="math-nowrap">$\tilde{x}$</span>), SD (<span class="math-nowrap">$s$</span>)</td><td>Treating every integer as a category</td></tr>
+                  <tr><td><strong>Categorical</strong></td><td>Nominal (Unordered)</td><td>`Event_ID` (`EVT001`), `Gender` (`Female`)</td><td>Counts (`COUNTIF`), Proportions (<span class="math-nowrap">$\hat{p}$</span>)</td><td>Computing `=AVERAGE(Event_ID)`</td></tr>
+                  <tr><td><strong>Categorical</strong></td><td>Ordinal (Ranked)</td><td>`Satisfaction_Score` (`1` = Poor to `5` = Great)</td><td>Median (<span class="math-nowrap">$\tilde{x}$</span>), Mode, Bar Chart, Mean</td><td>Assuming distance $1 \to 2$ equals $4 \to 5$</td></tr>
+                  <tr><td><strong>Binary</strong></td><td>Dichotomous (`0/1`)</td><td>`Purchased_24h` (`Yes` / `No`)</td><td>Conversion Rate <span class="math-nowrap">$\hat{p} = k / n$</span></td><td>Plotting a continuous line trend</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- SUBVIEW 1.4 -->
+        <div id="lec-4" class="lec-subview" style="display:none;">
+          <div class="split-grid" style="margin-bottom: 1.1rem;">
+            <div class="mini-card">
+              <span class="eyebrow">CASE 1 // DYNAMIC SURGE PRICING</span>
+              <h3>Ride-Hailing Demand vs. Supply</h3>
+              <p style="font-size:0.84rem;">Startups balance scarce drivers <span class="math-nowrap">($S$)</span> against rider requests <span class="math-nowrap">($D$)</span> using demand ratio <span class="math-nowrap">$R = D / S$</span>.</p>
+              <label style="font-size:0.8rem; font-weight:600;">Rider Requests (<span class="math-nowrap">$D$</span>): <span id="sim-d-val">300</span></label>
+              <input type="range" id="sim-d" min="50" max="400" step="10" value="300" oninput="updateStartupSim()">
+              <label style="font-size:0.8rem; font-weight:600;">Available Drivers (<span class="math-nowrap">$S$</span>): <span id="sim-s-val">40</span></label>
+              <input type="range" id="sim-s" min="20" max="150" step="5" value="40" oninput="updateStartupSim()">
+              <div class="formula-box" id="sim-surge-out" style="font-size:0.85rem; font-weight:600;"></div>
+            </div>
+
+            <div class="mini-card">
+              <span class="eyebrow">CASE 2 // CUSTOMER ACQUISITION (CAC)</span>
+              <h3>E-Commerce Channel Allocation</h3>
+              <p style="font-size:0.84rem;">Compare ad spend vs. purchase value across startup channels (<span class="math-nowrap">$\text{ROAS} = \text{Revenue} / \text{Ad Spend}$</span>).</p>
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr><th>Channel</th><th>Ad Spend</th><th>Purchase</th><th>Action</th></tr>
+                  </thead>
+                  <tbody>
+                    <tr><td>Google Ads</td><td>$10.00</td><td>$45.00</td><td><span class="badge-ok">Scale (4.5x)</span></td></tr>
+                    <tr class="flagged-row"><td>Social Media</td><td>$5.00</td><td>$0.00</td><td><span class="badge-flag">Pause / Retarget</span></td></tr>
+                    <tr><td>Referral</td><td>$0.00</td><td>$15.00</td><td><span class="badge-ok">Expand Incentives</span></td></tr>
+                    <tr><td>Content SEO</td><td>$0.00</td><td>$60.00</td><td><span class="badge-ok">Invest Organic</span></td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <h3>End-to-End Data-to-Decision Pipeline</h3>
+          <div class="grid-3">
+            <div class="mini-card"><div class="eyebrow">STAGE 01</div><h3>Collect</h3><p style="font-size:0.84rem; margin:0;">Capture clean events via forms, POS logs, sensors, and web clicks.</p></div>
+            <div class="mini-card"><div class="eyebrow">STAGE 02</div><h3>Clean &amp; Structure</h3><p style="font-size:0.84rem; margin:0;">Standardize dates, categories, and missing values in tables.</p></div>
+            <div class="mini-card"><div class="eyebrow">STAGE 03</div><h3>Summarize</h3><p style="font-size:0.84rem; margin:0;">Compute <span class="math-nowrap">$\bar{x}$</span>, <span class="math-nowrap">$\tilde{x}$</span>, <span class="math-nowrap">$s$</span>, IQR, and conversion <span class="math-nowrap">$\hat{p}$</span>.</p></div>
+            <div class="mini-card"><div class="eyebrow">STAGE 04</div><h3>Visualize</h3><p style="font-size:0.84rem; margin:0;">Reveal bottlenecks instantly with grouped bar &amp; trend charts.</p></div>
+            <div class="mini-card"><div class="eyebrow">STAGE 05</div><h3>Decide (<span class="math-nowrap">$\tau$</span>)</h3><p style="font-size:0.84rem; margin:0;">Trigger action when metrics cross your cut-off threshold.</p></div>
+            <div class="mini-card"><div class="eyebrow">STAGE 06</div><h3>Measure Impact</h3><p style="font-size:0.84rem; margin:0;">Track whether the decision improved outcomes in the next cycle.</p></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== TAB 2: EXCEL LAB ==================== -->
+    <section class="tab-panel" id="panel-lab">
+      <div class="glass-card">
+        <div class="eyebrow" data-editable>WEEK 01 EXCEL LAB (70 MINS) // MYCOURSEVILLE SUBMISSION</div>
+        <h2 data-editable>Conversion &amp; Customer Satisfaction (Event-Based Dataset)</h2>
+        <p data-editable>Define the target conversion event, denominator, and 24-hour attribution window across 60 customer responses (`EVT001` Smart Speaker, `EVT002` Fitness Tracker, `EVT003` Wireless Earbuds), inspect descriptive statistics (<span class="math-nowrap">$n, \bar{x}, \tilde{x}, s, \text{IQR}, \hat{p}$</span>), and download the `.csv` dataset for Excel.</p>
+
+        <div class="grid-4" style="margin-bottom: 1rem;">
+          <div class="mini-card"><div style="font-size:0.72rem; font-family:var(--font-mono); color:var(--ink-secondary);">COUNT (<span class="math-nowrap">$n$</span>) &amp; RANGE</div><div id="stat-n" style="font-size:1.35rem; font-weight:800;">60 (2–5)</div></div>
+          <div class="mini-card"><div style="font-size:0.72rem; font-family:var(--font-mono); color:var(--ink-secondary);">MEAN (<span class="math-nowrap">$\bar{x}$</span>) &amp; MEDIAN (<span class="math-nowrap">$\tilde{x}$</span>)</div><div id="stat-mean" style="font-size:1.35rem; font-weight:800; color:var(--accent-blue);">3.80 / 4.0</div></div>
+          <div class="mini-card"><div style="font-size:0.72rem; font-family:var(--font-mono); color:var(--ink-secondary);">STD DEV (<span class="math-nowrap">$s$</span>) &amp; IQR</div><div id="stat-med-sd" style="font-size:1.35rem; font-weight:800;">0.95 / 1.0</div></div>
+          <div class="mini-card"><div style="font-size:0.72rem; font-family:var(--font-mono); color:var(--ink-secondary);">24H CONV (<span class="math-nowrap">$\hat{p}$</span>)</div><div id="stat-conv" style="font-size:1.35rem; font-weight:800; color:#167c27;">68.3%</div></div>
+        </div>
+
+        <div style="display:flex; flex-wrap:wrap; gap:8px; align-items:center; justify-content:space-between; margin-bottom:12px;">
+          <div style="display:flex; flex-wrap:wrap; gap:8px; align-items:center;">
+            <select id="lab-filter-event" class="apple-select" style="width:auto; margin:0;" onchange="renderLabTable()">
+              <option value="ALL">Filter: All Events (n = 60)</option>
+              <option value="EVT001">EVT001 — Smart Speaker (n = 20)</option>
+              <option value="EVT002">EVT002 — Fitness Tracker (n = 20)</option>
+              <option value="EVT003">EVT003 — Wireless Earbuds (n = 20)</option>
+            </select>
+            <select id="lab-sort-by" class="apple-select" style="width:auto; margin:0;" onchange="renderLabTable()">
+              <option value="id_asc">Sort: Response_ID (Ascending)</option>
+              <option value="score_desc">Sort: Satisfaction_Score (High &rarr; Low)</option>
+              <option value="score_asc">Sort: Satisfaction_Score (Low &rarr; High)</option>
+            </select>
+          </div>
+          <button class="primary-btn" style="width:auto; padding:10px 16px;" onclick="downloadLabCSV()">Download Full 60-Row Dataset (.CSV)</button>
+        </div>
+
+        <div class="table-wrap" style="max-height: 290px; overflow-y: auto; margin-bottom: 1.25rem;">
+          <table id="lab-data-table"></table>
+        </div>
+
+        <div class="split-grid">
+          <div class="mini-card">
+            <h3>Live Excel 365 Formula Sandbox</h3>
+            <p style="font-size:0.82rem;">Click any Excel formula preset below to evaluate it live on the currently filtered table:</p>
+            <div style="display:flex; flex-wrap:wrap; gap:6px; margin-bottom:8px;">
+              <button class="subpill-btn" data-formula='=AVERAGE(G2:G61)' onclick="runFormulaPreset(this)">=AVERAGE(G2:G61)</button>
+              <button class="subpill-btn" data-formula='=MEDIAN(G2:G61)' onclick="runFormulaPreset(this)">=MEDIAN(G2:G61)</button>
+              <button class="subpill-btn" data-formula='=STDEV.S(G2:G61)' onclick="runFormulaPreset(this)">=STDEV.S(G2:G61)</button>
+              <button class="subpill-btn" data-formula='=COUNTIF(G2:G61, ">=4")' onclick="runFormulaPreset(this)">=COUNTIF(G2:G61, "&gt;=4")</button>
+              <button class="subpill-btn" data-formula='=COUNTIF(J2:J61, "Yes")/COUNTA(J2:J61)' onclick="runFormulaPreset(this)">Conversion Rate</button>
+            </div>
+            <input type="text" id="excel-formula-input" class="apple-input" value='=AVERAGE(G2:G61)' oninput="evaluateExcelFormula()">
+            <div class="formula-box" id="excel-formula-result" style="font-family:var(--font-mono); font-size:0.88rem; font-weight:700; color:var(--accent-blue); margin:0;">Result: 3.80</div>
+          </div>
+
+          <div class="mini-card">
+            <h3>Average Satisfaction Score by Product</h3>
+            <p style="font-size:0.82rem;">Visual comparison across all 3 showcase events (<span class="math-nowrap">$n = 20$</span> per event):</p>
+            <div class="bar-row">
+              <div class="bar-label"><span>EVT003 — Wireless Earbuds</span><span>4.45 / 5.0</span></div>
+              <div class="bar-track"><div class="bar-fill" style="width: 89%; background: var(--success);"></div></div>
+            </div>
+            <div class="bar-row">
+              <div class="bar-label"><span>EVT001 — Smart Speaker</span><span>3.95 / 5.0</span></div>
+              <div class="bar-track"><div class="bar-fill" style="width: 79%;"></div></div>
+            </div>
+            <div class="bar-row">
+              <div class="bar-label"><span>EVT002 — Fitness Tracker</span><span>3.00 / 5.0</span></div>
+              <div class="bar-track"><div class="bar-fill" style="width: 60%; background: var(--danger);"></div></div>
+            </div>
+            <p style="font-size:0.8rem; margin:8px 0 0 0;"><strong>Lab Deliverable (MyCourseVille):</strong> Upload your formatted `.xlsx` file (with Excel Table, conversion definition, summary metrics, bar chart, and a 100-word insight reflection) to MyCourseVille.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== TAB 3: CONCEPT QUIZ ==================== -->
+    <section class="tab-panel" id="panel-quiz">
+      <div class="glass-card" style="max-width: 700px; margin: 0 auto 1.25rem auto;">
+        <div class="eyebrow">ATTENDANCE &amp; CONCEPT CHECK (10 MINS)</div>
+        <h2>Student Verification &amp; Randomized Quiz</h2>
+        <p style="font-size:0.86rem;">Sign in with your Google Account or enter your Name and Student ID below. Questions and options are shuffled uniquely per student.</p>
+        <div id="g_id_onload" data-client_id="" data-callback="handleGoogleLogin" data-auto_prompt="false"></div>
+        <div class="g_id_signin" data-type="standard" data-size="large" data-theme="outline" data-text="sign_in_with" data-shape="pill"></div>
+        <div style="margin-top: 12px;">
+          <label style="font-family: var(--font-mono); font-size: 0.72rem; font-weight: 700;">FULL NAME</label>
+          <input type="text" id="input-name" class="apple-input" placeholder="e.g., Niran Wattana" oninput="syncStudent()">
+          <label style="font-family: var(--font-mono); font-size: 0.72rem; font-weight: 700;">STUDENT ID</label>
+          <input type="text" id="input-id" class="apple-input" placeholder="e.g., 66010942" oninput="syncStudent()">
+        </div>
+      </div>
+
+      <div id="quiz-questions-container" style="max-width: 700px; margin: 0 auto;"></div>
+
+      <div class="glass-card" id="slide-review" style="max-width: 700px; margin: 1.25rem auto 0 auto;">
+        <div class="eyebrow">FINAL ASSESSMENT RECEIPT</div>
+        <h2>Personal Score Summary &amp; Receipt</h2>
+        <div id="review-meta" style="font-family: var(--font-mono); font-size: 0.8rem; margin-bottom: 0.75rem; color: var(--ink-secondary);"></div>
+        <div id="review-score-banner" style="font-size: 1.45rem; font-weight: 800; color: var(--accent-blue); margin-bottom: 0.75rem;"></div>
+        <div id="review-breakdown" style="font-size: 0.85rem; margin-bottom: 0.85rem;"></div>
+        <div id="submission-status-msg" style="font-family: var(--font-mono); font-size: 0.76rem; color: var(--ink-secondary); margin-bottom: 0.75rem;"></div>
+
+        <div class="no-print" style="margin-top: 12px;">
+          <button class="primary-btn" onclick="submitAndDownloadPDF()">Submit Attendance &amp; Download PDF Receipt</button>
+          <button class="secondary-btn" style="width:100%; margin-top:8px;" onclick="window.print()">Print / Save Personal Review Sheet</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const CONFIG = JSON.parse(document.getElementById('week-content-data').textContent);
+    const isInstructorEdit = new URLSearchParams(window.location.search).get('edit') === '1';
+    if (isInstructorEdit) document.body.classList.add('instructor-edit-enabled');
+
+    function getBangkokNowString() {
+      return new Intl.DateTimeFormat('en-GB', {
+        timeZone: 'Asia/Bangkok', year: 'numeric', month: '2-digit', day: '2-digit',
+        hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false
+      }).format(new Date()) + ' ICT (UTC+7)';
+    }
+
+    function typesetMath() {
+      if (window.MathJax && MathJax.typesetPromise) {
+        MathJax.typesetPromise().catch(() => {});
+      }
+    }
+
+    function switchMainTab(tabName, btn) {
+      document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.getElementById('panel-' + tabName).classList.add('active');
+      if (btn) btn.classList.add('active');
+      if (tabName === 'quiz') updateReviewPanel();
+      typesetMath();
+    }
+
+    function switchLectureSub(subId, btn) {
+      document.querySelectorAll('.lec-subview').forEach(v => v.style.display = 'none');
+      document.querySelectorAll('.subpill-btn').forEach(b => b.classList.remove('active'));
+      document.getElementById(subId).style.display = 'block';
+      if (btn) btn.classList.add('active');
+      typesetMath();
+    }
+
+    const DOMAIN_DATA = {
+      health: {
+        min: 2, max: 16, def: 10, unit: 'ILI',
+        cols: ['Wk', 'Region', 'Facility', 'ILI', 'Status'],
+        rows: [
+          { a: 'W45', b: 'NY', c: 'F-1001', metric: 8 },
+          { a: 'W45', b: 'CA', c: 'F-2005', metric: 12 },
+          { a: 'W45', b: 'FL', c: 'F-3045', metric: 2 }
+        ],
+        actionText: 'Public Health Outbreak Alert Issued'
+      },
+      safety: {
+        min: 30, max: 60, def: 46, unit: 'm/s',
+        cols: ['UTC', 'Alt (m)', 'hPa', 'Wind', 'Status'],
+        rows: [
+          { a: '14:00', b: '10000', c: '265.0', metric: 45.2 },
+          { a: '14:01', b: '9985', c: '265.5', metric: 45.5 },
+          { a: '14:02', b: '9970', c: '266.1', metric: 46.1 },
+          { a: '14:03', b: '9955', c: '267.0', metric: 47.0 }
+        ],
+        actionText: 'Severe Hurricane Warning Broadcast'
+      },
+      gov: {
+        min: 2, max: 10, def: 7, unit: 'Idx',
+        cols: ['ID', 'Route', 'Riders', 'Idx', 'Status'],
+        rows: [
+          { a: 'T-101', b: 'North', c: '25,000', metric: 9 },
+          { a: 'T-102', b: 'East', c: '8,000', metric: 3 },
+          { a: 'T-103', b: 'Central', c: '15,000', metric: 6 },
+          { a: 'T-104', b: 'Airport', c: '5,000', metric: 2 }
+        ],
+        actionText: 'Route Flagged for Infrastructure Upgrade'
+      },
+      startup: {
+        min: 1, max: 5, def: 3, unit: 'Stars',
+        invert: true,
+        cols: ['ID', 'Sessions', 'Bugs', 'Score', 'Status'],
+        rows: [
+          { a: 'F-501', b: '15,000', c: '0', metric: 4.5 },
+          { a: 'F-502', b: '800', c: '45', metric: 2.1 },
+          { a: 'F-503', b: '22,000', c: '2', metric: 3.8 },
+          { a: 'F-504', b: '500', c: '0', metric: 4.9 }
+        ],
+        actionText: 'Sprint Hotfix Prioritized Immediately'
+      }
+    };
+
+    let lastDomainKey = '';
+    function renderDomainTable() {
+      const key = document.getElementById('domain-select').value;
+      const cfg = DOMAIN_DATA[key];
+      const slider = document.getElementById('tau-slider');
+      if (key !== lastDomainKey) {
+        slider.min = cfg.min; slider.max = cfg.max; slider.step = cfg.invert ? '0.5' : '1';
+        slider.value = cfg.def; lastDomainKey = key;
+      }
+      const tau = parseFloat(slider.value);
+      document.getElementById('tau-value-display').textContent = tau + ' ' + cfg.unit;
+
+      let flaggedCount = 0;
+      let html = '<thead><tr>' + cfg.cols.map(c => '<th>' + c + '</th>').join('') + '</tr></thead><tbody>';
+      cfg.rows.forEach(r => {
+        const isFlagged = cfg.invert ? (r.metric <= tau) : (r.metric >= tau);
+        if (isFlagged) flaggedCount++;
+        html += '<tr class="' + (isFlagged ? 'flagged-row' : '') + '">' +
+          '<td>' + r.a + '</td><td>' + r.b + '</td><td>' + r.c + '</td>' +
+          '<td><strong>' + r.metric + '</strong></td>' +
+          '<td>' + (isFlagged ? '<span class="badge-flag">TRIGGER</span>' : '<span class="badge-ok">NORMAL</span>') + '</td></tr>';
+      });
+      html += '</tbody>';
+      document.getElementById('domain-table').innerHTML = html;
+      document.getElementById('domain-insight-banner').textContent =
+        flaggedCount > 0
+          ? 'Decision Active (' + flaggedCount + ' flagged): ' + cfg.actionText
+          : 'All observations within safe threshold range.';
+      typesetMath();
+    }
+
+    function updateOutlierDemo() {
+      const x6 = parseInt(document.getElementById('outlier-slider').value, 10);
+      document.getElementById('outlier-x6-badge').textContent = '6th Order x₆ = ' + x6 + ' mins';
+      const arr = [18, 20, 21, 22, 24, x6].sort((a, b) => a - b);
+      const n = arr.length;
+      const mean = arr.reduce((a, b) => a + b, 0) / n;
+      const med = (arr[2] + arr[3]) / 2;
+      const sd = Math.sqrt(arr.reduce((acc, v) => acc + Math.pow(v - mean, 2), 0) / (n - 1));
+      document.getElementById('out-mean').textContent = mean.toFixed(1) + 'm';
+      document.getElementById('out-med').textContent = med.toFixed(1) + 'm';
+      document.getElementById('out-sd').textContent = sd.toFixed(2) + 'm';
+      document.getElementById('out-gap').textContent = Math.abs(mean - med).toFixed(1) + 'm';
+    }
+
+    function updateStartupSim() {
+      const d = parseInt(document.getElementById('sim-d').value, 10);
+      const s = parseInt(document.getElementById('sim-s').value, 10);
+      document.getElementById('sim-d-val').textContent = d;
+      document.getElementById('sim-s-val').textContent = s;
+      const ratio = d / s;
+      let mult = '1.0x (Base Price)';
+      let note = 'Balanced supply and demand.';
+      if (ratio >= 6.0) { mult = '2.0x Surge'; note = 'Severe shortage: doubles price to balance rider queue.'; }
+      else if (ratio >= 4.0) { mult = '1.5x Surge'; note = 'High demand: +50% incentive attracts nearby drivers.'; }
+      else if (ratio >= 2.2) { mult = '1.2x Mild Surge'; note = 'Supply catching up with demand.'; }
+      document.getElementById('sim-surge-out').innerHTML =
+        'Demand/Supply Ratio <span class="math-nowrap">$R = ' + ratio.toFixed(2) + '$</span> &rarr; <strong>' + mult + '</strong><br><span style="font-weight:400; color:var(--ink-secondary);">' + note + '</span>';
+      typesetMath();
+    }
+
+    const LAB_60_ROWS = (() => {
+      const events = [
+        { id: 'EVT001', date: '2027-01-02', prod: 'Smart Speaker', scores: [4,5,4,3,4,5,4,4,3,4,5,4,3,4,4,5,3,4,4,3], accs: ['Accurate','Accurate','Accurate','Delayed','Accurate','Accurate','Accurate','Accurate','Delayed','Accurate','Accurate','Accurate','Accurate','Accurate','Accurate','Accurate','Delayed','Accurate','Accurate','Accurate'] },
+        { id: 'EVT002', date: '2027-01-03', prod: 'Fitness Tracker', scores: [3,2,4,3,2,3,4,2,3,3,2,4,3,2,3,3,4,2,3,4], accs: ['Delayed','Delayed','Accurate','Delayed','Delayed','Accurate','Accurate','Delayed','Delayed','Accurate','Delayed','Accurate','Delayed','Delayed','Accurate','Delayed','Accurate','Delayed','Delayed','Accurate'] },
+        { id: 'EVT003', date: '2027-01-04', prod: 'Wireless Earbuds', scores: [5,4,5,4,5,4,5,4,5,4,5,4,4,5,4,5,4,5,4,4], accs: ['Accurate','Accurate','Accurate','Accurate','Accurate','Accurate','Accurate','Accurate','Accurate','Accurate','Accurate','Accurate','Accurate','Accurate','Accurate','Accurate','Accurate','Accurate','Accurate','Accurate'] }
+      ];
+      const genders = ['Female', 'Male', 'Female', 'Male', 'Non-Binary'];
+      const rows = [];
+      let rid = 1;
+      events.forEach(ev => {
+        for (let i = 0; i < 20; i++) {
+          const score = ev.scores[i];
+          const purchased = score >= 4 ? 'Yes' : 'No';
+          const mins = purchased === 'Yes' ? (120 + ((rid * 37) % 1180)) : (1520 + ((rid * 41) % 600));
+          rows.push({
+            Response_ID: rid,
+            Event_ID: ev.id,
+            Event_Date: ev.date,
+            Product_Type: ev.prod,
+            Customer_Age: 19 + ((rid * 3) % 18),
+            Gender: genders[(rid + i) % genders.length],
+            Satisfaction_Score: score,
+            Delivery_Accuracy: ev.accs[i],
+            Recommend: score >= 4 ? 'Yes' : 'No',
+            Purchased_24h: purchased,
+            Checkout_Mins: mins
+          });
+          rid++;
+        }
+      });
+      return rows;
+    })();
+
+    function getFilteredLabRows() {
+      const f = document.getElementById('lab-filter-event').value;
+      const s = document.getElementById('lab-sort-by').value;
+      let list = f === 'ALL' ? [...LAB_60_ROWS] : LAB_60_ROWS.filter(r => r.Event_ID === f);
+      if (s === 'score_desc') list.sort((a, b) => b.Satisfaction_Score - a.Satisfaction_Score);
+      if (s === 'score_asc') list.sort((a, b) => a.Satisfaction_Score - b.Satisfaction_Score);
+      return list;
+    }
+
+    function renderLabTable() {
+      const rows = getFilteredLabRows();
+      const n = rows.length;
+      const scores = rows.map(r => r.Satisfaction_Score).sort((a, b) => a - b);
+      const mean = scores.reduce((acc, v) => acc + v, 0) / n;
+      const median = n % 2 === 1 ? scores[(n - 1) / 2] : (scores[n / 2 - 1] + scores[n / 2]) / 2;
+      const q1 = scores[Math.floor(n * 0.25)];
+      const q3 = scores[Math.floor(n * 0.75)];
+      const iqr = q3 - q1;
+      const variance = scores.reduce((acc, v) => acc + Math.pow(v - mean, 2), 0) / (n - 1);
+      const sd = Math.sqrt(variance);
+      const conv = (rows.filter(r => r.Purchased_24h === 'Yes').length / n) * 100;
+
+      document.getElementById('stat-n').textContent = n + ' (' + scores[0] + '–' + scores[n - 1] + ')';
+      document.getElementById('stat-mean').textContent = mean.toFixed(2) + ' / ' + median.toFixed(1);
+      document.getElementById('stat-med-sd').textContent = sd.toFixed(2) + ' / ' + iqr.toFixed(1);
+      document.getElementById('stat-conv').textContent = conv.toFixed(1) + '%';
+
+      let html = '<thead><tr><th>ID</th><th>Event_ID</th><th>Date</th><th>Product_Type</th><th>Age</th><th>Gender</th><th>Score (1-5)</th><th>Delivery</th><th>Recommend</th><th>Purchased_24h</th><th>Checkout_Mins</th></tr></thead><tbody>';
+      rows.forEach(r => {
+        html += '<tr class="' + (r.Satisfaction_Score <= 2 ? 'flagged-row' : '') + '">' +
+          '<td>' + r.Response_ID + '</td><td>' + r.Event_ID + '</td><td>' + r.Event_Date + '</td>' +
+          '<td>' + r.Product_Type + '</td><td>' + r.Customer_Age + '</td><td>' + r.Gender + '</td>' +
+          '<td><strong>' + r.Satisfaction_Score + '</strong></td><td>' + r.Delivery_Accuracy + '</td>' +
+          '<td>' + r.Recommend + '</td><td>' + r.Purchased_24h + '</td><td>' + r.Checkout_Mins + '</td></tr>';
+      });
+      html += '</tbody>';
+      document.getElementById('lab-data-table').innerHTML = html;
+      evaluateExcelFormula();
+    }
+
+    function runFormulaPreset(btn) {
+      const f = btn.getAttribute('data-formula');
+      document.getElementById('excel-formula-input').value = f;
+      evaluateExcelFormula();
+    }
+
+    function evaluateExcelFormula() {
+      const rows = getFilteredLabRows();
+      const raw = document.getElementById('excel-formula-input').value.trim().toUpperCase();
+      const scores = rows.map(r => r.Satisfaction_Score);
+      const n = scores.length;
+      const mean = scores.reduce((a, b) => a + b, 0) / n;
+      const sorted = [...scores].sort((a, b) => a - b);
+      const med = n % 2 === 1 ? sorted[(n - 1) / 2] : (sorted[n / 2 - 1] + sorted[n / 2]) / 2;
+      const sd = Math.sqrt(scores.reduce((a, v) => a + Math.pow(v - mean, 2), 0) / (n - 1));
+      let out = '';
+      if (raw.includes('AVERAGE')) out = mean.toFixed(3);
+      else if (raw.includes('MEDIAN')) out = med.toFixed(2);
+      else if (raw.includes('STDEV')) out = sd.toFixed(3);
+      else if (raw.includes('>=4')) out = scores.filter(s => s >= 4).length + ' responses (Score >= 4)';
+      else if (raw.includes('COUNTA')) out = ((rows.filter(r => r.Purchased_24h === 'Yes').length / n) * 100).toFixed(1) + '% 24h Conversion';
+      else out = 'Try =AVERAGE(G2:G61), =MEDIAN(G2:G61), =STDEV.S(G2:G61), or =COUNTIF(G2:G61, ">=4")';
+      document.getElementById('excel-formula-result').textContent = 'Result: ' + out;
+    }
+
+    function downloadLabCSV() {
+      const headers = ['Response_ID','Event_ID','Event_Date','Product_Type','Customer_Age','Gender','Satisfaction_Score','Delivery_Accuracy','Recommend','Purchased_24h','Checkout_Mins'];
+      const lines = [headers.join(',')];
+      LAB_60_ROWS.forEach(r => {
+        lines.push(headers.map(h => r[h]).join(','));
+      });
+      const blob = new Blob([lines.join('\n')], { type: 'text/csv;charset=utf-8;' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = '5602107_W01_Conversion_Satisfaction_Dataset.csv';
+      a.click();
+    }
+
+    function shuffleArray(arr) {
+      const copy = [...arr];
+      for (let i = copy.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [copy[i], copy[j]] = [copy[j], copy[i]];
+      }
+      return copy;
+    }
+
+    const shuffledQuestions = shuffleArray(CONFIG.questions).map(q => ({
+      ...q,
+      shuffledOptions: shuffleArray(q.options)
+    }));
+
+    const studentState = { name: '', studentId: '', email: 'unverified@student.local', answers: {} };
+
+    function handleGoogleLogin(response) {
+      try {
+        const payload = JSON.parse(atob(response.credential.split('.')[1]));
+        studentState.email = payload.email || studentState.email;
+        if (payload.name && !document.getElementById('input-name').value) {
+          document.getElementById('input-name').value = payload.name;
+        }
+        syncStudent();
+      } catch (e) {}
+    }
+
+    function syncStudent() {
+      studentState.name = document.getElementById('input-name').value.trim();
+      studentState.studentId = document.getElementById('input-id').value.trim();
+      document.getElementById('hud-name').textContent = studentState.name || 'Guest Student';
+      updateReviewPanel();
+    }
+
+    function renderQuizQuestions() {
+      const container = document.getElementById('quiz-questions-container');
+      const letters = ['A', 'B', 'C', 'D'];
+      container.innerHTML = shuffledQuestions.map((q, idx) => {
+        const optsHtml = q.shuffledOptions.map((opt, oIdx) =>
+          '<button class="mcq-btn" id="btn-' + q.id + '-' + oIdx + '" onclick="selectOption(\'' + q.id + '\', ' + oIdx + ')">' +
+            '<span class="mcq-badge">' + letters[oIdx] + '</span>' +
+            '<span>' + opt.text + '</span>' +
+          '</button>'
+        ).join('');
+        return '<div class="glass-card">' +
+          '<div class="eyebrow">' + q.tag + ' // QUESTION ' + (idx + 1) + ' OF ' + shuffledQuestions.length + '</div>' +
+          '<p style="color:var(--ink-primary); font-weight:600; font-size:1rem;">' + q.prompt + '</p>' +
+          '<div class="mcq-list">' + optsHtml + '</div>' +
+          '<div class="verdict-text" id="verdict-' + q.id + '"></div>' +
+        '</div>';
+      }).join('');
+      typesetMath();
+    }
+
+    function selectOption(qId, optIdx) {
+      const q = shuffledQuestions.find(item => item.id === qId);
+      const chosen = q.shuffledOptions[optIdx];
+      studentState.answers[qId] = { chosenIndex: optIdx, correct: chosen.correct, text: chosen.text };
+
+      q.shuffledOptions.forEach((_, idx) => {
+        const btn = document.getElementById('btn-' + qId + '-' + idx);
+        btn.classList.remove('correct', 'wrong');
+        if (idx === optIdx) btn.classList.add(chosen.correct ? 'correct' : 'wrong');
+      });
+
+      const verdictEl = document.getElementById('verdict-' + qId);
+      verdictEl.style.color = chosen.correct ? '#167c27' : '#b91c1c';
+      verdictEl.textContent = chosen.correct ? 'STATUS: CORRECT' : 'STATUS: INCORRECT';
+
+      const correctCount = Object.values(studentState.answers).filter(a => a.correct).length;
+      document.getElementById('hud-score').textContent = correctCount + ' / ' + shuffledQuestions.length;
+      updateReviewPanel();
+    }
+
+    function updateReviewPanel() {
+      const total = shuffledQuestions.length;
+      const correctCount = Object.values(studentState.answers).filter(a => a.correct).length;
+      document.getElementById('review-meta').textContent =
+        'Student: ' + (studentState.name || 'Not entered') + ' | ID: ' + (studentState.studentId || 'Not entered') + ' | Email: ' + studentState.email;
+      document.getElementById('review-score-banner').textContent = 'Your Score: ' + correctCount + ' / ' + total;
+      document.getElementById('review-breakdown').innerHTML = shuffledQuestions.map((q, i) => {
+        const ans = studentState.answers[q.id];
+        const status = !ans ? 'Unanswered' : (ans.correct ? 'CORRECT' : 'INCORRECT');
+        return '<div style="padding:5px 0; border-bottom:1px solid rgba(0,0,0,0.06);"><strong>Q' + (i + 1) + ' (' + q.id + '):</strong> ' + status + '</div>';
+      }).join('');
+    }
+
+    async function submitAndDownloadPDF() {
+      const bkkTime = getBangkokNowString();
+      const total = shuffledQuestions.length;
+      const correctCount = Object.values(studentState.answers).filter(a => a.correct).length;
+      const payload = {
+        weekId: CONFIG.weekId,
+        bangkokTime: bkkTime,
+        email: studentState.email,
+        name: studentState.name || 'Anonymous',
+        studentId: studentState.studentId || 'NO_ID',
+        score: correctCount + '/' + total,
+        questionOrder: shuffledQuestions.map(q => q.id).join(','),
+        answers: JSON.stringify(studentState.answers)
+      };
+
+      const scriptUrl = (CONFIG.appsScriptUrl || '').trim();
+      const statusEl = document.getElementById('submission-status-msg');
+      if (scriptUrl && scriptUrl.startsWith('http')) {
+        statusEl.style.color = '#0071e3';
+        statusEl.textContent = 'Submitting attendance & score...';
+        try {
+          await fetch(scriptUrl, {
+            method: 'POST', mode: 'no-cors',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+          });
+          statusEl.style.color = '#167c27';
+          statusEl.textContent = 'Recorded at ' + bkkTime + ' — PDF receipt downloaded.';
+        } catch (err) {
+          statusEl.style.color = '#b91c1c';
+          statusEl.textContent = 'Saved locally at ' + bkkTime + ' — PDF receipt downloaded.';
+        }
+      } else {
+        statusEl.style.color = '#167c27';
+        statusEl.textContent = 'Completed at ' + bkkTime + ' — PDF receipt downloaded.';
+      }
+
+      if (window.jspdf && window.jspdf.jsPDF) {
+        const doc = new window.jspdf.jsPDF();
+        doc.setFontSize(16);
+        doc.text('5602107 Data Ecosystem — Week 01 Score Receipt', 16, 22);
+        doc.setFontSize(11);
+        doc.text('Student Name: ' + payload.name, 16, 36);
+        doc.text('Student ID: ' + payload.studentId, 16, 44);
+        doc.text('Google Account: ' + payload.email, 16, 52);
+        doc.text('Completion Time: ' + bkkTime, 16, 60);
+        doc.text('Personal Score: ' + payload.score, 16, 68);
+        doc.text('Question Sequence: ' + payload.questionOrder, 16, 76);
+        doc.save('5602107_WEEK_01_' + payload.studentId + '_Bangkok.pdf');
+      }
+    }
+
+    let editModeActive = false;
+    function toggleInstructorEdit() {
+      editModeActive = !editModeActive;
+      document.querySelectorAll('[data-editable]').forEach(el => {
+        el.contentEditable = editModeActive ? 'true' : 'false';
+        el.classList.toggle('editing-active', editModeActive);
+      });
+      document.getElementById('btn-toggle-edit').textContent = editModeActive ? 'Done Editing' : 'Edit';
+    }
+
+    function exportCleanHtml() {
+      if (editModeActive) toggleInstructorEdit();
+      document.body.classList.remove('instructor-edit-enabled');
+      const htmlContent = '<!doctype html>\n' + document.documentElement.outerHTML;
+      if (isInstructorEdit) document.body.classList.add('instructor-edit-enabled');
+      const blob = new Blob([htmlContent], { type: 'text/html;charset=utf-8' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'week01.html';
+      a.click();
+    }
+
+    (function initThreeBg() {
+      if (!window.THREE) return;
+      const canvas = document.getElementById('webgl-bg');
+      const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      const scene = new THREE.Scene();
+      const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 100);
+      camera.position.z = 5;
+      const geo = new THREE.IcosahedronGeometry(1.75, 2);
+      const mat = new THREE.MeshBasicMaterial({ color: 0x0071e3, wireframe: true, transparent: true, opacity: 0.08 });
+      const mesh = new THREE.Mesh(geo, mat);
+      mesh.position.set(1.6, 0.4, 0);
+      scene.add(mesh);
+      window.addEventListener('resize', () => {
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+      });
+      function animate() {
+        requestAnimationFrame(animate);
+        mesh.rotation.y += 0.0018;
+        mesh.rotation.x += 0.0009;
+        renderer.render(scene, camera);
+      }
+      animate();
+    })();
+
+    renderDomainTable();
+    updateOutlierDemo();
+    updateStartupSim();
+    renderLabTable();
+    renderQuizQuestions();
+    updateReviewPanel();
+    typesetMath();
+    setInterval(() => {
+      const el = document.getElementById('hud-bkk-clock');
+      if (el) el.textContent = 'BKK ' + getBangkokNowString().split(' ')[1];
+    }, 1000);
+  </script>
+</body>
+</html>
