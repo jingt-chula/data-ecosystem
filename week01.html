@@ -167,6 +167,24 @@
     h3 { font-size: 1.05rem; font-weight: 700; letter-spacing: -0.015em; margin: 0 0 0.4rem 0; }
     p { color: var(--ink-secondary); line-height: 1.55; margin: 0 0 0.85rem 0; }
 
+    .loop-strip {
+      display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px;
+      margin: 0.95rem 0 0.25rem 0;
+    }
+    @media (max-width: 720px) {
+      .loop-strip { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+    .loop-step {
+      background: #ffffff; border: var(--border-hairline); border-radius: var(--radius-md);
+      padding: 9px 12px; box-shadow: var(--shadow-card);
+    }
+    .loop-step-num {
+      font-family: var(--font-mono); font-size: 0.67rem; font-weight: 700;
+      color: var(--accent-blue); text-transform: uppercase;
+    }
+    .loop-step-title { font-size: 0.84rem; font-weight: 700; color: var(--ink-primary); margin-top: 2px; }
+    .loop-step-sub { font-size: 0.74rem; color: var(--ink-secondary); margin-top: 1px; }
+
     .subpill-bar { display: flex; flex-wrap: wrap; gap: 6px; margin: 1rem 0 1.35rem 0; }
     .subpill-btn {
       border: var(--border-hairline); background: #ffffff; color: var(--ink-secondary);
@@ -383,6 +401,29 @@
         <div class="eyebrow" data-editable>5602107 // WEEK 01 · 5 JAN 2027 (CLOs 1, 2)</div>
         <h1 data-editable>Data Thinking for Startups and Innovation</h1>
         <p data-editable>Raw numbers have zero value on their own. Innovators create value by defining clear conversion events, organizing data into descriptive metrics, applying cut-off thresholds <span class="math-nowrap">($\tau$)</span>, and executing evidence-based decisions.</p>
+
+        <div class="loop-strip">
+          <div class="loop-step">
+            <div class="loop-step-num">01 // Decision</div>
+            <div class="loop-step-title">Define the Action</div>
+            <div class="loop-step-sub">What choice changes if a threshold <span class="math-nowrap">($\tau$)</span> is crossed?</div>
+          </div>
+          <div class="loop-step">
+            <div class="loop-step-num">02 // Metric Spec</div>
+            <div class="loop-step-title">Event, Denom &amp; Window</div>
+            <div class="loop-step-sub">Lock target event <span class="math-nowrap">($k$)</span>, cohort <span class="math-nowrap">($n$)</span>, and window (e.g., 24h).</div>
+          </div>
+          <div class="loop-step">
+            <div class="loop-step-num">03 // Structure</div>
+            <div class="loop-step-title">Clean Row Grain</div>
+            <div class="loop-step-sub">One observation per row in an Excel Table (<span class="math-nowrap">$\bar{x}, \tilde{x}, s$</span>).</div>
+          </div>
+          <div class="loop-step">
+            <div class="loop-step-num">04 // Action Rule</div>
+            <div class="loop-step-title">Execute &amp; Verify</div>
+            <div class="loop-step-sub">Compare metric vs. <span class="math-nowrap">$\tau$</span> and measure post-action lift.</div>
+          </div>
+        </div>
 
         <div class="subpill-bar">
           <button class="subpill-btn active" onclick="switchLectureSub('lec-1', this)">1.1 Data &rarr; Insight &amp; Thresholds</button>
@@ -707,6 +748,43 @@ Hi team, my parcel arrived late...</pre>
             <p style="font-size:0.8rem; margin:8px 0 0 0;"><strong>Lab Deliverable (MyCourseVille):</strong> Upload your formatted `.xlsx` file (with Excel Table, conversion definition, summary metrics, bar chart, and a 100-word insight reflection) to MyCourseVille.</p>
           </div>
         </div>
+        <div class="split-grid" style="margin-top: 1.25rem;">
+          <div class="mini-card">
+            <div class="eyebrow">LAB TOOL // CONVERSION DENOMINATOR &amp; WINDOW</div>
+            <h3>Cohort &amp; Attribution Window Calculator</h3>
+            <p style="font-size:0.82rem;">Test how tightening the attribution window (e.g., 24h vs. 7d) or changing the denominator <span class="math-nowrap">($n$)</span> shifts conversion <span class="math-nowrap">$\hat{p} = (k / n) \times 100\%$</span>:</p>
+            <div class="grid-3" style="gap:8px;">
+              <div>
+                <label style="font-family:var(--font-mono); font-size:0.68rem; font-weight:700;">WINDOW</label>
+                <select id="calc-window" class="apple-select" onchange="updateConvCalc()">
+                  <option value="24h" selected>24 Hours (Strict)</option>
+                  <option value="7d">7 Days (Standard)</option>
+                  <option value="30d">30 Days (Broad)</option>
+                </select>
+              </div>
+              <div>
+                <label style="font-family:var(--font-mono); font-size:0.68rem; font-weight:700;">COHORT (<span class="math-nowrap">$n$</span>)</label>
+                <input type="number" id="calc-n" class="apple-input" value="60" min="1" oninput="updateConvCalc()">
+              </div>
+              <div>
+                <label style="font-family:var(--font-mono); font-size:0.68rem; font-weight:700;">CONVERTERS (<span class="math-nowrap">$k$</span>)</label>
+                <input type="number" id="calc-k" class="apple-input" value="41" min="0" oninput="updateConvCalc()">
+              </div>
+            </div>
+            <div class="formula-box" id="conv-calc-output" style="margin:4px 0 0 0; font-size:0.84rem; font-weight:600;"></div>
+          </div>
+
+          <div class="mini-card">
+            <div class="eyebrow">MYCOURSEVILLE DELIVERABLE // INSIGHT REFLECTION</div>
+            <h3>100-Word Lab Insight &amp; Decision Memo</h3>
+            <p style="font-size:0.82rem;">Draft your evidence-based recommendation from the 60-row dataset and export a clean <code>.txt</code> summary alongside your <code>.xlsx</code> workbook:</p>
+            <textarea id="lab-reflection-text" class="apple-input" rows="4" style="font-family:var(--font-display); font-size:0.84rem; resize:vertical;" placeholder="Example: Wireless Earbuds (EVT003) achieved the highest mean satisfaction (4.45/5.0) and 100% 24h conversion, whereas Fitness Tracker (EVT002) fell below our threshold (mean 3.00, 55% delayed deliveries). Action: audit EVT002 courier SLA before scaling ads." oninput="updateReflectionCount()"></textarea>
+            <div style="display:flex; justify-content:space-between; align-items:center; gap:8px; flex-wrap:wrap;">
+              <span id="reflection-word-count" style="font-family:var(--font-mono); font-size:0.74rem; color:var(--ink-secondary);">0 words (target: ~80–120 words)</span>
+              <button class="secondary-btn" onclick="downloadLabReflection()">Export Reflection (.TXT)</button>
+            </div>
+          </div>
+        </div>
       </div>
     </section>
 
@@ -983,6 +1061,49 @@ Hi team, my parcel arrived late...</pre>
       document.getElementById('excel-formula-result').textContent = 'Result: ' + out;
     }
 
+    function updateConvCalc() {
+      const win = document.getElementById('calc-window').value;
+      const n = Math.max(1, parseInt(document.getElementById('calc-n').value || '1', 10));
+      const k = Math.max(0, parseInt(document.getElementById('calc-k').value || '0', 10));
+      const out = document.getElementById('conv-calc-output');
+      if (k > n) {
+        out.style.color = '#b91c1c';
+        out.textContent = 'Invalid spec: Converters (k = ' + k + ') cannot exceed Cohort Denominator (n = ' + n + ').';
+        return;
+      }
+      const rate = (k / n) * 100;
+      out.style.color = '#0071e3';
+      out.innerHTML = 'Window: <strong>' + win + '</strong> | <span class="math-nowrap">$\\hat{p} = \\frac{' + k + '}{' + n + '} \\times 100\\% = ' + rate.toFixed(1) + '\\%$</span>';
+      typesetMath();
+    }
+
+    function updateReflectionCount() {
+      const txt = document.getElementById('lab-reflection-text').value.trim();
+      const words = txt ? txt.split(/\s+/).length : 0;
+      const el = document.getElementById('reflection-word-count');
+      el.style.color = (words >= 60 && words <= 150) ? '#167c27' : 'var(--ink-secondary)';
+      el.textContent = words + ' words (target: ~80–120 words)';
+    }
+
+    function downloadLabReflection() {
+      const name = (document.getElementById('input-name').value || 'Student').trim();
+      const sid = (document.getElementById('input-id').value || 'ID').trim();
+      const memo = document.getElementById('lab-reflection-text').value.trim() || '(No reflection text entered)';
+      const content = [
+        '5602107 Data Ecosystem — Week 01 Excel Lab Reflection',
+        'Student Name: ' + name,
+        'Student ID: ' + sid,
+        'Timestamp: ' + getBangkokNowString(),
+        '------------------------------------------------------------',
+        memo
+      ].join('\n');
+      const blob = new Blob([content], { type: 'text/plain;charset=utf-8;' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = '5602107_WEEK_01_' + sid + '_LabReflection.txt';
+      a.click();
+    }
+
     function downloadLabCSV() {
       const headers = ['Response_ID','Event_ID','Event_Date','Product_Type','Customer_Age','Gender','Satisfaction_Score','Delivery_Accuracy','Recommend','Purchased_24h','Checkout_Mins'];
       const lines = [headers.join(',')];
@@ -1170,6 +1291,7 @@ Hi team, my parcel arrived late...</pre>
     updateOutlierDemo();
     updateStartupSim();
     renderLabTable();
+    updateConvCalc();
     renderQuizQuestions();
     updateReviewPanel();
     typesetMath();

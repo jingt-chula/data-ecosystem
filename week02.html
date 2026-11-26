@@ -40,6 +40,7 @@
       --accent-blue: #0071e3;
       --accent-blue-soft: rgba(0, 113, 227, 0.10);
       --accent-indigo: #5856d6;
+      --accent-indigo-soft: rgba(88, 86, 214, 0.10);
       --success: #28cd41;
       --success-soft: rgba(40, 205, 65, 0.12);
       --danger: #ff3b30;
@@ -61,9 +62,10 @@
       margin: 0; padding: 0; width: 100%; min-height: 100%;
       background-color: var(--bg-canvas); color: var(--ink-primary);
       font-family: var(--font-display); overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
     }
 
-    /* Strict Inline MathJax Fix (prevents line-wrapping inside parentheses) */
+    /* Strict Inline MathJax Fix */
     mjx-container:not([display="true"]),
     mjx-container[jax="CHTML"]:not([display="true"]),
     mjx-container[jax="SVG"]:not([display="true"]) {
@@ -76,7 +78,7 @@
       display: block !important;
       overflow-x: auto;
       overflow-y: hidden;
-      margin: 0.35em 0 !important;
+      margin: 0.45em 0 !important;
     }
     .math-nowrap { white-space: nowrap; display: inline-block; }
 
@@ -99,10 +101,9 @@
     .portal-link {
       text-decoration: none; font-family: var(--font-mono); font-size: 0.74rem; font-weight: 700;
       color: var(--ink-secondary); background: rgba(0, 0, 0, 0.05); padding: 6px 11px; border-radius: 999px;
-      transition: all 0.15s ease;
+      transition: color 0.15s ease, background 0.15s ease;
     }
-    .portal-link:hover { background: rgba(0, 0, 0, 0.09); color: var(--accent-blue); }
-
+    .portal-link:hover { color: var(--accent-blue); background: rgba(0, 113, 227, 0.08); }
     .segmented-tabs {
       display: inline-flex; background: rgba(0, 0, 0, 0.06); padding: 4px; border-radius: 999px; gap: 4px;
     }
@@ -145,59 +146,58 @@
       background: var(--bg-glass); backdrop-filter: blur(24px) saturate(180%);
       -webkit-backdrop-filter: blur(24px) saturate(180%);
       border: var(--border-hairline); border-radius: var(--radius-xl);
-      padding: 1.5rem; box-shadow: var(--shadow-ambient); width: 100%; margin-bottom: 1.25rem;
-      overflow: hidden;
+      padding: 1.5rem; box-shadow: var(--shadow-ambient); width: 100%;
+      margin-bottom: 1.25rem; overflow: hidden;
     }
     @media (min-width: 860px) {
       .glass-card { padding: 2rem; }
-      .split-grid { display: grid; grid-template-columns: minmax(0, 1.06fr) minmax(0, 0.94fr); gap: 1.65rem; align-items: start; }
-      .grid-2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.1rem; }
-      .grid-3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1rem; }
+      .split-grid { display: grid; grid-template-columns: minmax(0, 1.06fr) minmax(0, 0.94fr); gap: 1.5rem; align-items: start; }
+      .grid-2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }
       .grid-4 { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0.9rem; }
     }
     @media (max-width: 859px) {
-      .split-grid, .grid-2, .grid-3, .grid-4 { display: flex; flex-direction: column; gap: 1rem; }
+      .split-grid, .grid-2, .grid-4 { display: flex; flex-direction: column; gap: 1rem; }
     }
 
     .eyebrow {
       display: inline-block; font-family: var(--font-mono); font-size: 0.7rem; font-weight: 700;
       letter-spacing: 0.05em; text-transform: uppercase; color: var(--accent-blue);
-      background: var(--accent-blue-soft); padding: 4px 10px; border-radius: 999px; margin-bottom: 0.7rem;
+      background: var(--accent-blue-soft); padding: 4px 10px; border-radius: 999px; margin-bottom: 0.65rem;
     }
-    h1 { font-size: clamp(1.55rem, 3vw, 2.15rem); font-weight: 700; letter-spacing: -0.03em; line-height: 1.18; margin: 0 0 0.5rem 0; }
-    h2 { font-size: clamp(1.25rem, 2.2vw, 1.65rem); font-weight: 700; letter-spacing: -0.025em; line-height: 1.22; margin: 0 0 0.5rem 0; }
-    h3 { font-size: 1.08rem; font-weight: 700; letter-spacing: -0.02em; line-height: 1.25; margin: 0 0 0.45rem 0; }
-    p { color: var(--ink-secondary); line-height: 1.55; margin: 0 0 0.85rem 0; font-size: 0.95rem; }
+    h1 { font-size: clamp(1.5rem, 2.8vw, 2.05rem); font-weight: 700; letter-spacing: -0.03em; line-height: 1.18; margin: 0 0 0.45rem 0; }
+    h2 { font-size: clamp(1.22rem, 2.1vw, 1.58rem); font-weight: 700; letter-spacing: -0.025em; line-height: 1.22; margin: 0 0 0.45rem 0; }
+    h3 { font-size: 1.04rem; font-weight: 700; letter-spacing: -0.02em; line-height: 1.25; margin: 0 0 0.4rem 0; }
+    p { color: var(--ink-secondary); line-height: 1.55; margin: 0 0 0.85rem 0; font-size: 0.94rem; }
 
     .subpill-bar { display: flex; flex-wrap: wrap; gap: 6px; margin: 1rem 0 1.35rem 0; }
     .subpill-btn {
       border: var(--border-hairline); background: #ffffff; color: var(--ink-secondary);
-      padding: 7px 14px; border-radius: 999px; font-size: 0.8rem; font-weight: 600; cursor: pointer;
+      padding: 6px 13px; border-radius: 999px; font-size: 0.79rem; font-weight: 600; cursor: pointer;
       transition: all 0.15s ease;
     }
     .subpill-btn.active { background: var(--accent-blue); color: #ffffff; border-color: var(--accent-blue); }
 
     .formula-box {
       background: #ffffff; border: var(--border-hairline); border-radius: var(--radius-md);
-      padding: 0.95rem 1.15rem; margin: 0.85rem 0; overflow-x: auto; box-shadow: var(--shadow-card);
+      padding: 0.95rem 1.1rem; margin: 0.75rem 0; overflow-x: auto; box-shadow: var(--shadow-card);
     }
 
     .callout-pill {
       display: flex; align-items: flex-start; gap: 10px;
-      background: rgba(0, 113, 227, 0.06); border: 1px solid rgba(0, 113, 227, 0.18);
+      background: var(--accent-blue-soft); border: 1px solid rgba(0, 113, 227, 0.18);
       border-radius: var(--radius-md); padding: 0.85rem 1rem; margin-top: 0.8rem;
-      font-size: 0.88rem; color: var(--ink-primary); line-height: 1.45;
+      font-size: 0.87rem; color: var(--ink-primary); line-height: 1.45;
     }
 
-    /* macOS Telemetry Window */
+    /* macOS Window Frame */
     .macos-window {
       background: #ffffff; border: var(--border-hairline); border-radius: var(--radius-md);
       box-shadow: var(--shadow-card); overflow: hidden;
     }
     .macos-titlebar {
       display: flex; align-items: center; justify-content: space-between;
-      padding: 9px 14px; background: #f2f2f5; border-bottom: var(--border-hairline);
-      font-family: var(--font-mono); font-size: 0.72rem; color: var(--ink-secondary);
+      padding: 8px 13px; background: #f2f2f5; border-bottom: var(--border-hairline);
+      font-family: var(--font-mono); font-size: 0.71rem; color: var(--ink-secondary);
     }
     .traffic-lights { display: inline-flex; gap: 6px; }
     .traffic-lights span { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
@@ -206,51 +206,52 @@
     .node-row {
       display: flex; align-items: center; justify-content: space-between; gap: 10px;
       padding: 9px 11px; border-radius: var(--radius-sm); background: #f9f9fb;
-      border: 1px solid rgba(0,0,0,0.05); margin-bottom: 8px;
+      border: 1px solid rgba(0, 0, 0, 0.05); margin-bottom: 8px;
     }
     .node-row:last-child { margin-bottom: 0; }
-    .badge-tag {
-      font-family: var(--font-mono); font-size: 0.68rem; font-weight: 700;
-      padding: 3px 8px; border-radius: 999px; white-space: nowrap;
-    }
-    .badge-blue { background: rgba(0, 113, 227, 0.12); color: #0066cc; }
-    .badge-purple { background: rgba(88, 86, 214, 0.12); color: #4846b8; }
-    .badge-green { background: rgba(40, 205, 65, 0.14); color: #1d9630; }
-    .badge-amber { background: rgba(255, 149, 0, 0.15); color: #bd6c00; }
-    .badge-red { background: rgba(255, 59, 48, 0.14); color: #d1281f; }
 
-    /* Tables */
-    .table-wrap { overflow-x: auto; border-radius: var(--radius-md); border: var(--border-hairline); background: #ffffff; }
+    .badge-tag {
+      font-family: var(--font-mono); font-size: 0.67rem; font-weight: 700;
+      padding: 3px 8px; border-radius: 999px; white-space: nowrap; display: inline-block;
+    }
+    .badge-blue { background: var(--accent-blue-soft); color: #0066cc; }
+    .badge-purple { background: var(--accent-indigo-soft); color: #4846b8; }
+    .badge-green { background: var(--success-soft); color: #167c27; }
+    .badge-amber { background: var(--warning-soft); color: #b25e00; }
+    .badge-red { background: var(--danger-soft); color: #b91c1c; }
+
+    /* Clean Tables */
+    .table-wrap { overflow-x: auto; border-radius: var(--radius-md); border: var(--border-hairline); background: #ffffff; box-shadow: var(--shadow-card); }
     table.clean-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; text-align: left; }
     table.clean-table th {
       background: #f5f5f7; color: var(--ink-primary); font-weight: 700;
       padding: 10px 12px; border-bottom: var(--border-hairline); font-size: 0.78rem;
     }
     table.clean-table td {
-      padding: 9px 12px; border-bottom: 1px solid rgba(0,0,0,0.05); color: var(--ink-secondary); vertical-align: middle;
+      padding: 9px 12px; border-bottom: 1px solid rgba(0, 0, 0, 0.05); color: var(--ink-secondary); vertical-align: middle;
     }
     table.clean-table tr:last-child td { border-bottom: none; }
 
-    /* Interactive Sliders & Controls */
-    .control-group { margin-bottom: 1rem; }
+    /* Interactive Sliders & Metrics */
+    .control-group { margin-bottom: 0.95rem; }
     .control-group label {
-      display: flex; justify-content: space-between; font-size: 0.84rem; font-weight: 600;
+      display: flex; justify-content: space-between; font-size: 0.83rem; font-weight: 600;
       color: var(--ink-primary); margin-bottom: 5px;
     }
     input[type="range"] { width: 100%; accent-color: var(--accent-blue); cursor: pointer; }
 
-    .metric-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 10px; }
+    .metric-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; margin-top: 10px; }
     .metric-box {
       background: #f9f9fb; border: var(--border-hairline); border-radius: var(--radius-sm);
-      padding: 10px; text-align: center;
+      padding: 10px 8px; text-align: center;
     }
-    .metric-label { font-family: var(--font-mono); font-size: 0.66rem; color: var(--ink-secondary); text-transform: uppercase; }
-    .metric-val { font-family: var(--font-mono); font-size: 1.05rem; font-weight: 700; color: var(--accent-blue); margin-top: 3px; }
+    .metric-label { font-family: var(--font-mono); font-size: 0.65rem; color: var(--ink-secondary); text-transform: uppercase; }
+    .metric-val { font-family: var(--font-mono); font-size: 1rem; font-weight: 700; color: var(--accent-blue); margin-top: 3px; }
 
-    /* Interactive DFD SVG Canvas */
+    /* Interactive SVG DFD Stage */
     .dfd-stage {
       background: #ffffff; border: var(--border-hairline); border-radius: var(--radius-md);
-      padding: 12px; box-shadow: var(--shadow-card); overflow-x: auto;
+      padding: 10px; box-shadow: var(--shadow-card); overflow-x: auto;
     }
     .dfd-svg { width: 100%; min-width: 620px; height: auto; display: block; }
     .dfd-node { cursor: pointer; transition: opacity 0.15s ease; }
@@ -258,49 +259,45 @@
 
     /* Inputs & Buttons */
     .apple-input, .apple-select, .apple-textarea {
-      width: 100%; padding: 10px 13px; margin: 5px 0 12px 0; background: #ffffff;
+      width: 100%; padding: 9px 12px; margin: 5px 0 11px 0; background: #ffffff;
       border: 1px solid rgba(0, 0, 0, 0.16); border-radius: var(--radius-sm);
-      font-family: var(--font-display); font-size: 0.9rem; color: var(--ink-primary);
+      font-family: var(--font-display); font-size: 0.88rem; color: var(--ink-primary);
     }
+    .apple-input { font-family: var(--font-mono); font-size: 0.84rem; }
     .apple-textarea { min-height: 82px; resize: vertical; }
     .primary-btn {
       width: 100%; padding: 12px 18px; background: var(--accent-blue); color: #ffffff;
-      border: none; border-radius: var(--radius-md); font-weight: 600; font-size: 0.92rem; cursor: pointer;
+      border: none; border-radius: var(--radius-md); font-weight: 600; font-size: 0.9rem; cursor: pointer;
     }
     .primary-btn:hover { background: #0062c4; }
     .secondary-btn {
-      width: 100%; padding: 11px 16px; background: #ffffff; color: var(--ink-primary);
-      border: 1px solid rgba(0, 0, 0, 0.14); border-radius: var(--radius-md);
-      font-weight: 600; font-size: 0.88rem; cursor: pointer; margin-top: 8px;
+      width: 100%; padding: 10px 14px; background: #ffffff; color: var(--ink-primary);
+      border: 1px solid rgba(0, 0, 0, 0.15); border-radius: var(--radius-sm);
+      font-weight: 600; font-size: 0.84rem; cursor: pointer; margin-top: 8px;
     }
     .secondary-btn:hover { background: #f5f5f7; }
     .chip-btn {
       border: var(--border-hairline); background: #ffffff; color: var(--ink-primary);
-      padding: 6px 12px; border-radius: 999px; font-size: 0.78rem; font-weight: 600; cursor: pointer;
+      padding: 6px 12px; border-radius: 999px; font-size: 0.77rem; font-weight: 600; cursor: pointer;
     }
     .chip-btn.active { background: var(--ink-primary); color: #ffffff; }
 
     /* Equal-Length MCQ Options */
     .mcq-list { display: flex; flex-direction: column; gap: 0.65rem; margin-top: 1rem; }
     .mcq-btn {
-      display: flex; align-items: flex-start; gap: 12px; width: 100%; padding: 0.9rem 1rem;
+      display: flex; align-items: flex-start; gap: 12px; width: 100%; padding: 0.88rem 1rem;
       background: #ffffff; border: 1px solid rgba(0, 0, 0, 0.12); border-radius: var(--radius-md);
-      color: var(--ink-primary); font-size: 0.93rem; line-height: 1.42; text-align: left; cursor: pointer;
+      color: var(--ink-primary); font-size: 0.92rem; line-height: 1.4; text-align: left; cursor: pointer;
       transition: border-color 0.15s ease, background 0.15s ease;
     }
     .mcq-btn:hover { border-color: var(--accent-blue); background: rgba(0, 113, 227, 0.03); }
     .mcq-btn.correct { border-color: var(--success); background: var(--success-soft); }
     .mcq-btn.wrong { border-color: var(--danger); background: var(--danger-soft); }
     .mcq-badge {
-      flex-shrink: 0; font-family: var(--font-mono); font-size: 0.78rem; font-weight: 700;
+      flex-shrink: 0; font-family: var(--font-mono); font-size: 0.76rem; font-weight: 700;
       color: var(--accent-blue); background: var(--accent-blue-soft); padding: 3px 8px; border-radius: 6px;
     }
-    .verdict-text { margin-top: 0.75rem; font-family: var(--font-mono); font-size: 0.82rem; font-weight: 700; min-height: 1.2em; }
-
-    .review-item {
-      padding: 10px 12px; border-radius: var(--radius-sm); border: 1px solid rgba(0,0,0,0.08);
-      background: #ffffff; margin-bottom: 8px; font-size: 0.85rem;
-    }
+    .verdict-text { margin-top: 0.7rem; font-family: var(--font-mono); font-size: 0.8rem; font-weight: 700; min-height: 1.2em; }
 
     @media print {
       #webgl-bg, .top-bar, .no-print { display: none !important; }
@@ -318,7 +315,6 @@
   {
     "weekId": "WEEK_02",
     "courseCode": "5602107",
-    "eyebrow": "5602107 // WEEK 02 // 12-JAN-27 // CLO 1",
     "weekTitle": "Modern Data Ecosystems & Data Flow",
     "questions": [
       {
@@ -395,7 +391,7 @@
 
   <header class="top-bar">
     <div class="nav-left">
-      <a href="index.html" class="portal-link">&larr; Course Schedule</a>
+      <a class="portal-link" href="index.html">&larr; Course Schedule</a>
       <nav class="segmented-tabs" role="tablist">
         <button class="tab-btn active" onclick="switchMainTab('lecture', this)">1. Lecture (60m)</button>
         <button class="tab-btn" onclick="switchMainTab('lab', this)">2. draw.io Lab (70m)</button>
@@ -415,13 +411,13 @@
   <main class="stage-container">
 
     <!-- =========================================================
-         TAB 1: LECTURE (60 MINS) — 4 SUB-PILLS
+         TAB 1: LECTURE (60 MINS)
          ========================================================= -->
     <section class="tab-panel active" id="panel-lecture">
       <div class="glass-card">
-        <div class="eyebrow" data-editable id="week-eyebrow">5602107 // WEEK 02 // 12-JAN-27 // CLO 1</div>
-        <h1 data-editable id="week-heading">Modern Data Ecosystems &amp; Data Flow</h1>
-        <p data-editable id="week-intro">How startup actors, API gateways, operational cloud databases, analytical warehouses, and access controls connect raw product events to business decisions.</p>
+        <div class="eyebrow" data-editable>5602107 // WEEK 02 // 12-JAN-27 // CLO 1</div>
+        <h1 data-editable>Modern Data Ecosystems &amp; Data Flow</h1>
+        <p data-editable>How startup actors, API gateways, operational cloud databases, analytical warehouses, and access controls connect raw product events to business decisions.</p>
 
         <div class="subpill-bar">
           <button class="subpill-btn active" onclick="switchLectureSub('lec-1', this)">1.1 Data Ecosystems &amp; Roles</button>
@@ -450,7 +446,6 @@
               </div>
             </div>
 
-            <!-- Interactive Case Switcher: Food Delivery vs. University Registration -->
             <div class="macos-window">
               <div class="macos-titlebar">
                 <div class="traffic-lights">
@@ -470,7 +465,7 @@
             </div>
           </div>
 
-          <div class="grid-2" style="margin-top: 1.25rem;">
+          <div class="grid-2" style="margin-top: 1.15rem;">
             <div class="formula-box" style="margin:0;">
               <span class="badge-tag badge-blue">INTERNAL DATA</span>
               <h3 style="margin-top:8px;">First-Party Operational Telemetry</h3>
@@ -484,7 +479,7 @@
           </div>
         </div>
 
-        <!-- SUB-VIEW 1.2: DATA FLOW & BATCH VS. NEAR-REAL-TIME SIMULATOR -->
+        <!-- SUB-VIEW 1.2: BATCH VS. STREAMING LATENCY SIMULATOR -->
         <div id="lec-2" class="lec-subview" style="display:none;">
           <div class="split-grid">
             <div>
@@ -528,7 +523,6 @@
               </div>
             </div>
 
-            <!-- Interactive Latency & Pipeline Mode Simulator -->
             <div class="formula-box" style="margin:0;">
               <span class="eyebrow">INTERACTIVE PIPELINE SIMULATOR</span>
               <h3>End-to-End Latency &amp; SLA Check</h3>
@@ -545,12 +539,12 @@
               </div>
 
               <div class="control-group">
-                <label><span>Ingestion Interval ($T_{\text{ingest}}$)</span><span id="sim-cadence-val">1 sec (Streaming)</span></label>
+                <label><span>Ingestion Interval <span class="math-nowrap">($T_{\text{ingest}}$)</span></span><span id="sim-cadence-val">1 sec (Streaming)</span></label>
                 <input type="range" id="sim-cadence" min="0" max="4" step="1" value="0" oninput="updateFlowSim()">
               </div>
 
               <div class="control-group">
-                <label><span>Peak Event Burst ($\lambda$)</span><span id="sim-burst-val">2,500 events/s</span></label>
+                <label><span>Peak Event Burst <span class="math-nowrap">($\lambda$)</span></span><span id="sim-burst-val">2,500 events/s</span></label>
                 <input type="range" id="sim-burst" min="500" max="10000" step="500" value="2500" oninput="updateFlowSim()">
               </div>
 
@@ -565,17 +559,15 @@
                 </div>
                 <div class="metric-box">
                   <div class="metric-label">SLA Status</div>
-                  <div class="metric-val" id="sim-status-out" style="color:#1d9630;">PASS</div>
+                  <div class="metric-val" id="sim-status-out" style="color:#167c27;">PASS</div>
                 </div>
               </div>
-              <div id="sim-advice" class="callout-pill" style="font-size:0.82rem; margin-top:10px;">
-                Streaming webhook + event queue meets real-time fraud blocking under 2 seconds.
-              </div>
+              <div id="sim-advice" class="callout-pill" style="font-size:0.82rem; margin-top:10px;"></div>
             </div>
           </div>
         </div>
 
-        <!-- SUB-VIEW 1.3: MODERN CLOUD STACK & GOVERNANCE CONTROLS -->
+        <!-- SUB-VIEW 1.3: MODERN CLOUD STACK & GOVERNANCE -->
         <div id="lec-3" class="lec-subview" style="display:none;">
           <h2>1.3 Where Cloud DBs, APIs, Warehouses &amp; Access Controls Fit</h2>
           <p>Modern startups decouple <strong>live operational transactions (OLTP)</strong> from <strong>historical analytical workloads (OLAP)</strong> and enforce <strong>governance gates</strong> at every boundary.</p>
@@ -661,7 +653,6 @@
               </div>
             </div>
 
-            <!-- Interactive DFD Viewer -->
             <div>
               <div style="display:flex; gap:6px; margin-bottom:10px; flex-wrap:wrap;">
                 <button class="chip-btn active" id="dfd-tab-order" onclick="switchDfdPreview('order')">1. Ordering Process</button>
@@ -671,7 +662,7 @@
 
               <div class="dfd-stage" id="dfd-svg-container"></div>
               <div id="dfd-inspector-note" class="callout-pill" style="font-size:0.82rem;">
-                Click any shape in the diagram above to inspect its DFD role, cloud component, and governance check.
+                <span>🔍</span><span>Click any shape in the diagram above to inspect its DFD role, cloud component, and governance check.</span>
               </div>
             </div>
           </div>
@@ -685,8 +676,8 @@
     <section class="tab-panel" id="panel-lab">
       <div class="glass-card">
         <div class="eyebrow">HANDS-ON LAB (70 MINS) // DRAW.IO &amp; ARCHITECTURE MAPPING // CLO 1</div>
-        <h2>Startup Data Flow &amp; Governance Mapping Lab</h2>
-        <p>Map a startup’s end-to-end data flow in <strong>draw.io</strong> (<code>app.diagrams.net</code>), identify where a <strong>cloud database</strong>, an <strong>API</strong>, and a <strong>warehouse</strong> fit, compare <strong>batch vs. near-real-time</strong> events, and mark an <strong>access control gate</strong>.</p>
+        <h2 data-editable>Startup Data Flow &amp; Governance Mapping Lab</h2>
+        <p data-editable>Map a startup’s end-to-end data flow in <strong>draw.io</strong> (<code>app.diagrams.net</code>), identify where a <strong>cloud database</strong>, an <strong>API</strong>, and a <strong>warehouse</strong> fit, compare <strong>batch vs. near-real-time</strong> events, and mark an <strong>access control gate</strong>.</p>
 
         <div class="subpill-bar">
           <button class="subpill-btn active" onclick="switchLabSub('lab-brief', this)">2.1 Lab Brief &amp; Starter Template</button>
@@ -694,7 +685,7 @@
           <button class="subpill-btn" onclick="switchLabSub('lab-deliverable', this)">2.3 Reflection &amp; MyCourseVille Checklist</button>
         </div>
 
-        <!-- LAB SUB 2.1: SCENARIO & CHECKLIST -->
+        <!-- LAB SUB 2.1 -->
         <div id="lab-brief" class="lab-subview">
           <div class="split-grid">
             <div class="formula-box" style="margin:0;">
@@ -721,7 +712,7 @@
           </div>
         </div>
 
-        <!-- LAB SUB 2.2: INTERACTIVE DFD COMPONENT & FLOW CHECKER -->
+        <!-- LAB SUB 2.2 -->
         <div id="lab-validator" class="lab-subview" style="display:none;">
           <h3>Interactive DFD Component &amp; Governance Audit</h3>
           <p style="font-size:0.88rem;">Classify each ecosystem element into its proper DFD symbol, modern cloud layer, and data cadence before drawing in draw.io.</p>
@@ -746,12 +737,12 @@
           </div>
         </div>
 
-        <!-- LAB SUB 2.3: STRUCTURED REFLECTION BUILDER -->
+        <!-- LAB SUB 2.3 -->
         <div id="lab-deliverable" class="lab-subview" style="display:none;">
           <div class="split-grid">
             <div>
               <h3>Structured Lab Reflection &amp; Architecture Justification</h3>
-              <p style="font-size:0.86rem;">Complete the four prompts below to generate your formatted Lab Reflection file to submit alongside your <strong>draw.io PNG &amp; XML</strong> on <strong>MyCourseVille</strong>.</p>
+              <p style="font-size:0.86rem;">Complete the four prompts below to generate your formatted Lab Reflection file to submit alongside your <strong>draw.io PNG</strong> on <strong>MyCourseVille</strong>.</p>
 
               <label style="font-family:var(--font-mono); font-size:0.72rem; font-weight:700;">1. SELECTED ECOSYSTEM &amp; PRIMARY ENTITIES</label>
               <input type="text" id="ref-entities" class="apple-input" placeholder="e.g., Quick-Commerce App: Customer, Restaurant, Rider, Payment API...">
@@ -760,7 +751,7 @@
               <textarea id="ref-storage" class="apple-textarea" placeholder="Explain why live orders stay in Cloud OLTP DB while historical reporting moves to the Warehouse..."></textarea>
 
               <label style="font-family:var(--font-mono); font-size:0.72rem; font-weight:700;">3. BATCH vs. NEAR-REAL-TIME TRADEOFF</label>
-              <textarea id="ref-cadence" class="apple-textarea" placeholder="Identify one flow requiring &lt;2s streaming and one flow suited for daily batch ETL..."></textarea>
+              <textarea id="ref-cadence" class="apple-textarea" placeholder="Identify one flow requiring <2s streaming and one flow suited for daily batch ETL..."></textarea>
 
               <label style="font-family:var(--font-mono); font-size:0.72rem; font-weight:700;">4. ACCESS CONTROL &amp; GOVERNANCE GATE (PDPA / RBAC)</label>
               <textarea id="ref-gov" class="apple-textarea" placeholder="Where did you place your 🔒 Access Control gate and what PII risk does it prevent?"></textarea>
@@ -774,12 +765,12 @@
               <ul style="margin: 8px 0 0 18px; padding: 0; color: var(--ink-secondary); font-size: 0.86rem; line-height: 1.65;">
                 <li><strong>File 1:</strong> High-resolution <code>week02_dfd.png</code> exported from <strong>draw.io</strong>.</li>
                 <li><strong>File 2:</strong> Editable <code>week02_dfd.drawio</code> source diagram file.</li>
-                <li><strong>File 3:</strong> Architecture Reflection (<code>WEEK02_LabReflection_&lt;ID&gt;.txt</code>).</li>
+                <li><strong>File 3:</strong> Short Architecture Reflection (<code>WEEK02_LabReflection_&lt;ID&gt;.txt</code>).</li>
                 <li><strong>File 4:</strong> Concept Quiz PDF Receipt (<code>5602107_WEEK_02_&lt;ID&gt;_Receipt.pdf</code>) from Tab 3.</li>
               </ul>
               <div class="callout-pill" style="font-size:0.8rem; margin-top:12px;">
-                <span>ℹ️</span>
-                <span>Enter your Full Name and Student ID in Tab 3 before downloading your PDF receipt.</span>
+                <span>🛡️</span>
+                <span><strong>Governance Check:</strong> Confirm at least one <code>🔒 Access Control</code> boundary is clearly labeled in your diagram before exporting.</span>
               </div>
             </div>
           </div>
@@ -791,31 +782,26 @@
          TAB 3: CONCEPT QUIZ & PDF RECEIPT (10 MINS)
          ========================================================= -->
     <section class="tab-panel" id="panel-quiz">
-      <div class="glass-card" style="max-width: 720px; margin: 0 auto 1.25rem auto;">
-        <div class="eyebrow">CONCEPT CHECK &amp; SCORE RECEIPT (10 MINS) // CLO 1</div>
+      <div class="glass-card" style="max-width: 700px; margin: 0 auto 1.25rem auto;">
+        <div class="eyebrow">CONCEPT CHECK &amp; SCORE RECEIPT // CLO 1</div>
         <h2>Student Details &amp; Randomized Quiz</h2>
-        <p style="font-size:0.86rem;">Enter your Full Name and Student ID below. Questions and options are shuffled uniquely per student. After answering, download your PDF score receipt and upload it to <strong>MyCourseVille</strong>.</p>
-
-        <div class="grid-2" style="margin-top: 10px;">
-          <div>
-            <label style="font-family: var(--font-mono); font-size: 0.72rem; font-weight: 700;">FULL NAME</label>
-            <input type="text" id="input-name" class="apple-input" placeholder="e.g., Niran Wattana" oninput="syncStudent()">
-          </div>
-          <div>
-            <label style="font-family: var(--font-mono); font-size: 0.72rem; font-weight: 700;">STUDENT ID</label>
-            <input type="text" id="input-id" class="apple-input" placeholder="e.g., 66010942" oninput="syncStudent()">
-          </div>
+        <p style="font-size:0.86rem;">Enter your Full Name and Student ID below. Questions and options are shuffled uniquely per student. After answering, download your PDF receipt and upload it to <strong>MyCourseVille</strong>.</p>
+        <div style="margin-top: 10px;">
+          <label style="font-family: var(--font-mono); font-size: 0.72rem; font-weight: 700;">FULL NAME</label>
+          <input type="text" id="input-name" class="apple-input" placeholder="e.g., Niran Wattana" oninput="syncStudent()">
+          <label style="font-family: var(--font-mono); font-size: 0.72rem; font-weight: 700;">STUDENT ID</label>
+          <input type="text" id="input-id" class="apple-input" placeholder="e.g., 66010942" oninput="syncStudent()">
         </div>
       </div>
 
-      <div id="quiz-questions-container" style="max-width: 720px; margin: 0 auto;"></div>
+      <div id="quiz-questions-container" style="max-width: 700px; margin: 0 auto;"></div>
 
-      <div class="glass-card" id="slide-review" style="max-width: 720px; margin: 1.25rem auto 0 auto;">
+      <div class="glass-card" id="slide-review" style="max-width: 700px; margin: 1.25rem auto 0 auto;">
         <div class="eyebrow">FINAL ASSESSMENT RECEIPT</div>
         <h2>Personal Score Summary &amp; PDF Receipt</h2>
-        <div id="review-meta" style="font-family: var(--font-mono); font-size: 0.8rem; margin-bottom: 0.65rem; color: var(--ink-secondary);"></div>
-        <div id="review-score-banner" style="font-size: 1.45rem; font-weight: 800; color: var(--accent-blue); margin-bottom: 0.85rem;"></div>
-        <div id="review-breakdown" style="margin-bottom: 0.85rem;"></div>
+        <div id="review-meta" style="font-family: var(--font-mono); font-size: 0.8rem; margin-bottom: 0.75rem; color: var(--ink-secondary);"></div>
+        <div id="review-score-banner" style="font-size: 1.45rem; font-weight: 800; color: var(--accent-blue); margin-bottom: 0.75rem;"></div>
+        <div id="review-breakdown" style="font-size: 0.85rem; margin-bottom: 0.85rem;"></div>
         <div id="submission-status-msg" style="font-family: var(--font-mono); font-size: 0.78rem; color: var(--ink-secondary); margin-bottom: 0.75rem;"></div>
         <div class="no-print" style="margin-top: 12px;">
           <button class="primary-btn" onclick="downloadReceiptPDF()">Download PDF Score Receipt</button>
@@ -834,13 +820,6 @@
     const isInstructorEdit = new URLSearchParams(window.location.search).get('edit') === '1';
     if (isInstructorEdit) document.body.classList.add('instructor-edit-enabled');
 
-    const studentState = {
-      name: '',
-      studentId: '',
-      answers: {},
-      shuffledQuestions: []
-    };
-
     function getBangkokNowString() {
       return new Intl.DateTimeFormat('en-GB', {
         timeZone: 'Asia/Bangkok', year: 'numeric', month: '2-digit', day: '2-digit',
@@ -854,11 +833,6 @@
       }
     }
 
-    setInterval(() => {
-      const clock = document.getElementById('hud-bkk-clock');
-      if (clock) clock.textContent = 'BKK ' + getBangkokNowString().split(' ')[1];
-    }, 1000);
-
     /* =========================================================
        2. NAVIGATION & INSTRUCTOR LIVE EDITOR (?edit=1)
        ========================================================= */
@@ -867,7 +841,7 @@
       document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
       document.getElementById('panel-' + tabName).classList.add('active');
       if (btn) btn.classList.add('active');
-      if (tabName === 'quiz') updateReviewSheet();
+      if (tabName === 'quiz') updateReviewPanel();
       typesetMath();
     }
 
@@ -929,15 +903,15 @@
     function setEcosystemCase(key) {
       document.getElementById('eco-btn-food').classList.toggle('active', key === 'food');
       document.getElementById('eco-btn-uni').classList.toggle('active', key === 'uni');
-      const rows = ECOSYSTEM_CASES[key].map(item => `
-        <div class="node-row">
-          <div>
-            <div style="font-weight:700; font-size:0.86rem; color:var(--ink-primary);">${item.actor}</div>
-            <div style="font-size:0.78rem; color:var(--ink-secondary);">${item.detail}</div>
-          </div>
-          <span class="badge-tag ${item.badge}">${item.role}</span>
-        </div>
-      `).join('');
+      const rows = ECOSYSTEM_CASES[key].map(item =>
+        '<div class="node-row">' +
+          '<div>' +
+            '<div style="font-weight:700; font-size:0.86rem; color:var(--ink-primary);">' + item.actor + '</div>' +
+            '<div style="font-size:0.78rem; color:var(--ink-secondary);">' + item.detail + '</div>' +
+          '</div>' +
+          '<span class="badge-tag ' + item.badge + '">' + item.role + '</span>' +
+        '</div>'
+      ).join('');
       document.getElementById('eco-case-content').innerHTML = rows;
     }
 
@@ -950,8 +924,8 @@
     ];
 
     function updateFlowSim() {
-      const scenarioEl = document.getElementById('sim-scenario');
-      const sla = parseInt(scenarioEl.value, 10);
+      const slaSel = document.getElementById('sim-scenario');
+      const sla = parseInt(slaSel.value, 10);
       const cIdx = parseInt(document.getElementById('sim-cadence').value, 10);
       const burst = parseInt(document.getElementById('sim-burst').value, 10);
 
@@ -959,7 +933,8 @@
       const procOverhead = +(0.25 + (burst / 10000) * 0.65).toFixed(2);
       const totalLat = +(step.sec + procOverhead).toFixed(2);
 
-      document.getElementById('sim-sla-label').textContent = sla >= 3600 ? `SLA: ${(sla / 3600)} hr` : `SLA: ${sla} sec`;
+      const slaNames = { '2': 'Fraud Block (< 2s)', '60': 'Rider Dispatch (< 60s)', '3600': 'Inventory Sync (< 1h)', '86400': 'Revenue Rollup (< 24h)' };
+      document.getElementById('sim-sla-label').textContent = slaNames[String(sla)] || ('SLA: ' + sla + 's');
       document.getElementById('sim-cadence-val').textContent = step.label;
       document.getElementById('sim-burst-val').textContent = burst.toLocaleString() + ' events/s';
       document.getElementById('sim-lat-out').textContent = totalLat >= 60 ? (totalLat / 60).toFixed(1) + ' min' : totalLat + ' s';
@@ -968,15 +943,15 @@
       const pass = totalLat <= sla;
       const statusEl = document.getElementById('sim-status-out');
       statusEl.textContent = pass ? 'PASS' : 'SLA BREACH';
-      statusEl.style.color = pass ? '#1d9630' : '#d1281f';
+      statusEl.style.color = pass ? '#167c27' : '#b91c1c';
 
       if (window.orbMat) {
         window.orbMat.color.setHex(pass ? 0x0071e3 : 0xff3b30);
       }
 
       document.getElementById('sim-advice').innerHTML = pass
-        ? `<span>✅</span><span><strong>SLA Met (${totalLat}s &le; ${sla}s):</strong> ${step.arch} handles ${burst.toLocaleString()} events/s within the decision window.</span>`
-        : `<span>⚠️</span><span><strong>Too Slow (${totalLat}s &gt; ${sla}s):</strong> Reduce ingestion interval <span class="math-nowrap">($T_{\\text{ingest}}$)</span> so data arrives before the decision window closes.</span>`;
+        ? '<span>✅</span><span><strong>SLA Met (' + totalLat + 's &le; ' + sla + 's):</strong> ' + step.arch + ' handles ' + burst.toLocaleString() + ' events/s within the decision window.</span>'
+        : '<span>⚠️</span><span><strong>Too Slow (' + totalLat + 's &gt; ' + sla + 's):</strong> Reduce ingestion interval <span class="math-nowrap">($T_{\\text{ingest}}$)</span> so data arrives before the decision window closes.</span>';
       typesetMath();
     }
 
@@ -1115,7 +1090,7 @@
     }
 
     function inspectDfd(msg) {
-      document.getElementById('dfd-inspector-note').innerHTML = `<span>🔍</span><span>${msg}</span>`;
+      document.getElementById('dfd-inspector-note').innerHTML = '<span>🔍</span><span>' + msg + '</span>';
     }
 
     /* =========================================================
@@ -1131,37 +1106,31 @@
 
     function renderLabAudit() {
       const tbody = document.getElementById('lab-audit-rows');
-      tbody.innerHTML = LAB_AUDIT_ITEMS.map(item => `
-        <tr>
-          <td><strong>${item.name}</strong></td>
-          <td>
-            <select id="${item.id}-sym" class="apple-select" style="margin:0; padding:6px 8px; font-size:0.82rem;">
-              <option value="">Select symbol...</option>
-              <option value="External Entity">External Entity (Rectangle)</option>
-              <option value="Process">Process (Circle)</option>
-              <option value="Data Store">Data Store (Parallel Lines)</option>
-            </select>
-          </td>
-          <td>
-            <select id="${item.id}-layer" class="apple-select" style="margin:0; padding:6px 8px; font-size:0.82rem;">
-              <option value="">Select layer...</option>
-              <option value="Client Edge">Client Edge</option>
-              <option value="API / App Logic">API / App Logic</option>
-              <option value="Cloud OLTP DB">Cloud OLTP DB</option>
-              <option value="Data Warehouse">Data Warehouse</option>
-              <option value="Governance Gate">Governance Gate</option>
-            </select>
-          </td>
-          <td>
-            <select id="${item.id}-cad" class="apple-select" style="margin:0; padding:6px 8px; font-size:0.82rem;">
-              <option value="">Select cadence...</option>
-              <option value="Near-Real-Time">Near-Real-Time (&lt;2s)</option>
-              <option value="Batch ETL">Batch ETL (Scheduled)</option>
-            </select>
-          </td>
-          <td id="${item.id}-res" style="font-family:var(--font-mono); font-weight:700; font-size:0.8rem;">—</td>
-        </tr>
-      `).join('');
+      tbody.innerHTML = LAB_AUDIT_ITEMS.map(item =>
+        '<tr>' +
+          '<td><strong>' + item.name + '</strong></td>' +
+          '<td><select id="' + item.id + '-sym" class="apple-select" style="margin:0; padding:6px 8px; font-size:0.82rem;">' +
+            '<option value="">Select symbol...</option>' +
+            '<option value="External Entity">External Entity (Rectangle)</option>' +
+            '<option value="Process">Process (Circle)</option>' +
+            '<option value="Data Store">Data Store (Parallel Lines)</option>' +
+          '</select></td>' +
+          '<td><select id="' + item.id + '-layer" class="apple-select" style="margin:0; padding:6px 8px; font-size:0.82rem;">' +
+            '<option value="">Select layer...</option>' +
+            '<option value="Client Edge">Client Edge</option>' +
+            '<option value="API / App Logic">API / App Logic</option>' +
+            '<option value="Cloud OLTP DB">Cloud OLTP DB</option>' +
+            '<option value="Data Warehouse">Data Warehouse</option>' +
+            '<option value="Governance Gate">Governance Gate</option>' +
+          '</select></td>' +
+          '<td><select id="' + item.id + '-cad" class="apple-select" style="margin:0; padding:6px 8px; font-size:0.82rem;">' +
+            '<option value="">Select cadence...</option>' +
+            '<option value="Near-Real-Time">Near-Real-Time (&lt;2s)</option>' +
+            '<option value="Batch ETL">Batch ETL (Scheduled)</option>' +
+          '</select></td>' +
+          '<td id="' + item.id + '-res" style="font-family:var(--font-mono); font-weight:700; font-size:0.8rem;">—</td>' +
+        '</tr>'
+      ).join('');
     }
 
     function gradeLabAudit() {
@@ -1174,42 +1143,42 @@
         if (s && l && c) {
           ok++;
           cell.textContent = 'PASS';
-          cell.style.color = '#1d9630';
+          cell.style.color = '#167c27';
         } else {
           cell.textContent = 'CHECK';
-          cell.style.color = '#d1281f';
+          cell.style.color = '#b91c1c';
         }
       });
-      document.getElementById('lab-audit-score').textContent = `Verified: ${ok} / ${LAB_AUDIT_ITEMS.length} rows accurate`;
+      document.getElementById('lab-audit-score').textContent = 'Verified: ' + ok + ' / ' + LAB_AUDIT_ITEMS.length + ' rows accurate';
     }
 
     function downloadStarterDrawio() {
-      const xml = `<?xml version="1.0" encoding="UTF-8"?>
-<mxfile host="app.diagrams.net">
-  <diagram name="Week-02-Startup-DFD" id="w02-dfd">
-    <mxGraphModel dx="900" dy="600" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100">
-      <root>
-        <mxCell id="0"/>
-        <mxCell id="1" parent="0"/>
-        <mxCell id="ent1" value="Customer (External Entity)" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
-          <mxGeometry x="60" y="180" width="130" height="70" as="geometry"/>
-        </mxCell>
-        <mxCell id="proc1" value="1.0 Order API Processing&#xa;[Near-Real-Time]" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
-          <mxGeometry x="270" y="165" width="100" height="100" as="geometry"/>
-        </mxCell>
-        <mxCell id="db1" value="D1: Cloud OLTP DB (Orders &amp; Stock)" style="shape=partialRectangle;whiteSpace=wrap;html=1;left=0;right=0;fillColor=none;" vertex="1" parent="1">
-          <mxGeometry x="450" y="80" width="190" height="50" as="geometry"/>
-        </mxCell>
-        <mxCell id="gov1" value="🔒 Access Control &amp; PII Masking Gate" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1">
-          <mxGeometry x="450" y="190" width="190" height="50" as="geometry"/>
-        </mxCell>
-        <mxCell id="dw1" value="D2: Cloud Data Warehouse (Analytics)" style="shape=partialRectangle;whiteSpace=wrap;html=1;left=0;right=0;fillColor=none;" vertex="1" parent="1">
-          <mxGeometry x="450" y="300" width="190" height="50" as="geometry"/>
-        </mxCell>
-      </root>
-    </mxGraphModel>
-  </diagram>
-</mxfile>`;
+      const xml = '<?xml version="1.0" encoding="UTF-8"?>\n' +
+        '<mxfile host="app.diagrams.net">\n' +
+        '  <diagram name="Week-02-Startup-DFD" id="w02-dfd">\n' +
+        '    <mxGraphModel dx="900" dy="600" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100">\n' +
+        '      <root>\n' +
+        '        <mxCell id="0"/>\n' +
+        '        <mxCell id="1" parent="0"/>\n' +
+        '        <mxCell id="ent1" value="Customer (External Entity)" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">\n' +
+        '          <mxGeometry x="60" y="180" width="130" height="70" as="geometry"/>\n' +
+        '        </mxCell>\n' +
+        '        <mxCell id="proc1" value="1.0 Order API Processing&#xa;[Near-Real-Time]" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">\n' +
+        '          <mxGeometry x="270" y="165" width="100" height="100" as="geometry"/>\n' +
+        '        </mxCell>\n' +
+        '        <mxCell id="db1" value="D1: Cloud OLTP DB (Orders &amp; Stock)" style="shape=partialRectangle;whiteSpace=wrap;html=1;left=0;right=0;fillColor=none;" vertex="1" parent="1">\n' +
+        '          <mxGeometry x="450" y="80" width="190" height="50" as="geometry"/>\n' +
+        '        </mxCell>\n' +
+        '        <mxCell id="gov1" value="🔒 Access Control &amp; PII Masking Gate" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1">\n' +
+        '          <mxGeometry x="450" y="190" width="190" height="50" as="geometry"/>\n' +
+        '        </mxCell>\n' +
+        '        <mxCell id="dw1" value="D2: Cloud Data Warehouse (Analytics)" style="shape=partialRectangle;whiteSpace=wrap;html=1;left=0;right=0;fillColor=none;" vertex="1" parent="1">\n' +
+        '          <mxGeometry x="450" y="300" width="190" height="50" as="geometry"/>\n' +
+        '        </mxCell>\n' +
+        '      </root>\n' +
+        '    </mxGraphModel>\n' +
+        '  </diagram>\n' +
+        '</mxfile>';
       const blob = new Blob([xml], { type: 'application/xml;charset=utf-8' });
       const a = document.createElement('a');
       a.href = URL.createObjectURL(blob);
@@ -1222,8 +1191,8 @@
       const sid = document.getElementById('input-id').value.trim() || 'ID_PENDING';
       const content = [
         '5602107 DATA ECOSYSTEM AND ALGORITHMIC THINKING — WEEK 02 LAB REFLECTION',
-        `Student: ${name} (${sid})`,
-        `Timestamp: ${getBangkokNowString()}`,
+        'Student: ' + name + ' (' + sid + ')',
+        'Timestamp: ' + getBangkokNowString(),
         '-----------------------------------------------------------------------',
         '1. SELECTED ECOSYSTEM & PRIMARY ENTITIES:',
         document.getElementById('ref-entities').value.trim() || '[Not filled]',
@@ -1241,12 +1210,12 @@
       const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
       const a = document.createElement('a');
       a.href = URL.createObjectURL(blob);
-      a.download = `WEEK02_LabReflection_${sid}.txt`;
+      a.download = 'WEEK02_LabReflection_' + sid + '.txt';
       a.click();
     }
 
     /* =========================================================
-       5. RANDOMIZED EQUAL-LENGTH MCQ ENGINE (ZERO EXPLANATION)
+       5. RANDOMIZED EQUAL-LENGTH MCQ ENGINE & PDF RECEIPT
        ========================================================= */
     function shuffleArray(arr) {
       const copy = [...arr];
@@ -1257,112 +1226,72 @@
       return copy;
     }
 
-    function initQuiz() {
-      studentState.shuffledQuestions = shuffleArray(CONFIG.questions).map(q => ({
-        ...q,
-        shuffledOptions: shuffleArray(q.options)
-      }));
+    const shuffledQuestions = shuffleArray(CONFIG.questions).map(q => ({
+      ...q,
+      shuffledOptions: shuffleArray(q.options)
+    }));
 
-      const container = document.getElementById('quiz-questions-container');
-      const letters = ['A', 'B', 'C', 'D'];
+    const studentState = { name: '', studentId: '', answers: {} };
 
-      container.innerHTML = studentState.shuffledQuestions.map((q, qIdx) => `
-        <div class="glass-card" id="qcard-${q.id}">
-          <div class="eyebrow">${q.tag} // QUESTION ${qIdx + 1} OF ${studentState.shuffledQuestions.length}</div>
-          <h3 style="font-size:1.05rem;">${q.prompt}</h3>
-          <div class="mcq-list">
-            ${q.shuffledOptions.map((opt, oIdx) => `
-              <button class="mcq-btn" id="opt-${q.id}-${oIdx}" onclick="selectMcqOption('${q.id}', ${oIdx})">
-                <span class="mcq-badge">${letters[oIdx]}</span>
-                <span>${opt.text}</span>
-              </button>
-            `).join('')}
-          </div>
-          <div class="verdict-text" id="verdict-${q.id}"></div>
-        </div>
-      `).join('');
-
-      updateHudScore();
-      updateReviewSheet();
-      typesetMath();
-    }
-
-    function selectMcqOption(qId, optIdx) {
-      const q = studentState.shuffledQuestions.find(item => item.id === qId);
-      if (!q) return;
-
-      const chosen = q.shuffledOptions[optIdx];
-      studentState.answers[qId] = {
-        chosenIndex: optIdx,
-        chosenText: chosen.text,
-        correct: !!chosen.correct
-      };
-
-      q.shuffledOptions.forEach((_, idx) => {
-        const btn = document.getElementById(`opt-${qId}-${idx}`);
-        btn.classList.remove('correct', 'wrong');
-        if (idx === optIdx) {
-          btn.classList.add(chosen.correct ? 'correct' : 'wrong');
-        }
-      });
-
-      const verdictEl = document.getElementById(`verdict-${qId}`);
-      verdictEl.textContent = chosen.correct ? 'STATUS: CORRECT' : 'STATUS: INCORRECT';
-      verdictEl.style.color = chosen.correct ? '#1d9630' : '#d1281f';
-
-      updateHudScore();
-      updateReviewSheet();
-    }
-
-    function computeScore() {
-      let score = 0;
-      studentState.shuffledQuestions.forEach(q => {
-        if (studentState.answers[q.id]?.correct) score++;
-      });
-      return score;
-    }
-
-    function updateHudScore() {
-      const total = studentState.shuffledQuestions.length;
-      document.getElementById('hud-score').textContent = `${computeScore()} / ${total}`;
-    }
-
-    /* =========================================================
-       6. STUDENT IDENTITY & LOCAL PDF RECEIPT (LMS UPLOAD)
-       ========================================================= */
     function syncStudent() {
       studentState.name = document.getElementById('input-name').value.trim();
       studentState.studentId = document.getElementById('input-id').value.trim();
       document.getElementById('hud-name').textContent = studentState.name || 'Guest Student';
-      updateReviewSheet();
+      updateReviewPanel();
     }
 
-    function updateReviewSheet() {
-      const total = studentState.shuffledQuestions.length;
-      const score = computeScore();
-      const name = studentState.name || 'Not Entered';
-      const sid = studentState.studentId || 'Not Entered';
-
-      document.getElementById('review-meta').innerHTML =
-        `Course: ${CONFIG.courseCode} | Module: ${CONFIG.weekId} (${CONFIG.weekTitle})<br>` +
-        `Student: ${name} | Student ID: ${sid}`;
-
-      document.getElementById('review-score-banner').textContent = `Personal Score: ${score} / ${total}`;
-
-      document.getElementById('review-breakdown').innerHTML = studentState.shuffledQuestions.map((q, idx) => {
-        const ans = studentState.answers[q.id];
-        const status = !ans ? 'UNANSWERED' : (ans.correct ? 'CORRECT' : 'INCORRECT');
-        const color = !ans ? '#515154' : (ans.correct ? '#1d9630' : '#d1281f');
-        return `<div class="review-item">
-          <div style="display:flex; justify-content:space-between; font-family:var(--font-mono); font-size:0.75rem; font-weight:700;">
-            <span>Q${idx + 1} (${q.id})</span>
-            <span style="color:${color};">${status}</span>
-          </div>
-          <div style="margin-top:4px; color:var(--ink-primary);">${q.prompt}</div>
-          <div style="margin-top:3px; color:var(--ink-secondary); font-size:0.8rem;">Selected: ${ans ? ans.chosenText : '—'}</div>
-        </div>`;
+    function renderQuizQuestions() {
+      const container = document.getElementById('quiz-questions-container');
+      const letters = ['A', 'B', 'C', 'D'];
+      container.innerHTML = shuffledQuestions.map((q, idx) => {
+        const optsHtml = q.shuffledOptions.map((opt, oIdx) =>
+          '<button class="mcq-btn" id="btn-' + q.id + '-' + oIdx + '" onclick="selectOption(\'' + q.id + '\', ' + oIdx + ')">' +
+            '<span class="mcq-badge">' + letters[oIdx] + '</span>' +
+            '<span>' + opt.text + '</span>' +
+          '</button>'
+        ).join('');
+        return '<div class="glass-card">' +
+          '<div class="eyebrow">' + q.tag + ' // QUESTION ' + (idx + 1) + ' OF ' + shuffledQuestions.length + '</div>' +
+          '<p style="color:var(--ink-primary); font-weight:600; font-size:1rem;">' + q.prompt + '</p>' +
+          '<div class="mcq-list">' + optsHtml + '</div>' +
+          '<div class="verdict-text" id="verdict-' + q.id + '"></div>' +
+        '</div>';
       }).join('');
       typesetMath();
+    }
+
+    function selectOption(qId, optIdx) {
+      const q = shuffledQuestions.find(item => item.id === qId);
+      const chosen = q.shuffledOptions[optIdx];
+      studentState.answers[qId] = { chosenIndex: optIdx, correct: chosen.correct, text: chosen.text };
+
+      q.shuffledOptions.forEach((_, idx) => {
+        const btn = document.getElementById('btn-' + qId + '-' + idx);
+        btn.classList.remove('correct', 'wrong');
+        if (idx === optIdx) btn.classList.add(chosen.correct ? 'correct' : 'wrong');
+      });
+
+      const verdictEl = document.getElementById('verdict-' + qId);
+      verdictEl.style.color = chosen.correct ? '#167c27' : '#b91c1c';
+      verdictEl.textContent = chosen.correct ? 'STATUS: CORRECT' : 'STATUS: INCORRECT';
+
+      const correctCount = Object.values(studentState.answers).filter(a => a.correct).length;
+      document.getElementById('hud-score').textContent = correctCount + ' / ' + shuffledQuestions.length;
+      updateReviewPanel();
+    }
+
+    function updateReviewPanel() {
+      const total = shuffledQuestions.length;
+      const correctCount = Object.values(studentState.answers).filter(a => a.correct).length;
+      document.getElementById('review-meta').textContent =
+        'Course: ' + CONFIG.courseCode + ' | Module: ' + CONFIG.weekId + ' | Student: ' +
+        (studentState.name || 'Not entered') + ' | ID: ' + (studentState.studentId || 'Not entered');
+      document.getElementById('review-score-banner').textContent = 'Your Score: ' + correctCount + ' / ' + total;
+      document.getElementById('review-breakdown').innerHTML = shuffledQuestions.map((q, i) => {
+        const ans = studentState.answers[q.id];
+        const status = !ans ? 'Unanswered' : (ans.correct ? 'CORRECT' : 'INCORRECT');
+        return '<div style="padding:6px 0; border-bottom:1px solid rgba(0,0,0,0.06);"><strong>Q' + (i + 1) + ' (' + q.id + '):</strong> ' + status + '</div>';
+      }).join('');
     }
 
     function downloadReceiptPDF() {
@@ -1371,60 +1300,47 @@
       const statusEl = document.getElementById('submission-status-msg');
 
       if (!name || !sid) {
-        statusEl.style.color = '#d1281f';
+        statusEl.style.color = '#b91c1c';
         statusEl.textContent = 'Please enter both your Full Name and Student ID above before downloading your PDF receipt.';
         document.getElementById('input-name').focus();
         return;
       }
 
       const bkkTime = getBangkokNowString();
-      const total = studentState.shuffledQuestions.length;
-      const score = computeScore();
-      const qOrder = studentState.shuffledQuestions.map(q => q.id).join(', ');
+      const total = shuffledQuestions.length;
+      const correctCount = Object.values(studentState.answers).filter(a => a.correct).length;
+      const qOrder = shuffledQuestions.map(q => q.id).join(', ');
 
-      statusEl.style.color = '#1d9630';
+      statusEl.style.color = '#167c27';
       statusEl.textContent = 'PDF receipt generated at ' + bkkTime + ' — please upload this PDF to MyCourseVille.';
 
-      const { jsPDF } = window.jspdf;
-      const doc = new jsPDF({ unit: 'pt', format: 'a4' });
-      doc.setFont('helvetica', 'bold');
-      doc.setFontSize(16);
-      doc.text(`${CONFIG.courseCode} — ${CONFIG.weekId} Score Receipt`, 44, 54);
+      if (window.jspdf && window.jspdf.jsPDF) {
+        const doc = new window.jspdf.jsPDF();
+        doc.setFontSize(16);
+        doc.text(CONFIG.courseCode + ' — ' + CONFIG.weekId + ' Score Receipt', 16, 22);
+        doc.setFontSize(11);
+        doc.text('Module: ' + CONFIG.weekTitle, 16, 32);
+        doc.text('Student Name: ' + name, 16, 40);
+        doc.text('Student ID: ' + sid, 16, 48);
+        doc.text('Completion Time: ' + bkkTime, 16, 56);
+        doc.text('Personal Score: ' + correctCount + ' / ' + total, 16, 64);
+        doc.text('Question Sequence: ' + qOrder, 16, 72);
 
-      doc.setFont('helvetica', 'normal');
-      doc.setFontSize(10.5);
-      doc.text(`Module: ${CONFIG.weekTitle}`, 44, 76);
-      doc.text(`Student Name: ${name}`, 44, 94);
-      doc.text(`Student ID: ${sid}`, 44, 110);
-      doc.text(`Completion Time: ${bkkTime}`, 44, 126);
-      doc.text(`Question Sequence: ${qOrder}`, 44, 142);
-
-      doc.setFont('helvetica', 'bold');
-      doc.setFontSize(13);
-      doc.setTextColor(0, 113, 227);
-      doc.text(`Recorded Score: ${score} / ${total}`, 44, 170);
-      doc.setTextColor(29, 29, 31);
-
-      let y = 200;
-      studentState.shuffledQuestions.forEach((q, idx) => {
-        const a = studentState.answers[q.id];
-        const status = !a ? 'UNANSWERED' : (a.correct ? 'CORRECT' : 'INCORRECT');
-        doc.setFont('helvetica', 'bold');
+        let y = 86;
         doc.setFontSize(10);
-        doc.text(`Q${idx + 1} [${q.id}] — ${status}`, 44, y);
-        y += 14;
-        doc.setFont('helvetica', 'normal');
-        const cleanPrompt = q.prompt.replace(/\\/g, '').replace(/\$/g, '');
-        const lines = doc.splitTextToSize(`${cleanPrompt} | Selected: ${a ? a.chosenText : 'None'}`, 505);
-        doc.text(lines, 44, y);
-        y += lines.length * 13 + 10;
-      });
+        shuffledQuestions.forEach((q, idx) => {
+          const ans = studentState.answers[q.id];
+          const verdict = !ans ? 'UNANSWERED' : (ans.correct ? 'CORRECT' : 'INCORRECT');
+          doc.text('Q' + (idx + 1) + ' [' + q.id + ']: ' + verdict, 16, y);
+          y += 7;
+        });
 
-      doc.save(`${CONFIG.courseCode}_${CONFIG.weekId}_${sid}_Receipt.pdf`);
+        doc.save(CONFIG.courseCode + '_' + CONFIG.weekId + '_' + sid + '_Receipt.pdf');
+      }
     }
 
     /* =========================================================
-       7. AMBIENT 3D GLASSY ORB (THREE.JS)
+       6. AMBIENT 3D GLASSY ORB (THREE.JS)
        ========================================================= */
     function initOrb() {
       const canvas = document.getElementById('webgl-bg');
@@ -1468,8 +1384,15 @@
     updateFlowSim();
     switchDfdPreview('order');
     renderLabAudit();
-    initQuiz();
+    renderQuizQuestions();
+    updateReviewPanel();
+    typesetMath();
     initOrb();
+
+    setInterval(() => {
+      const clock = document.getElementById('hud-bkk-clock');
+      if (clock) clock.textContent = 'BKK ' + getBangkokNowString().split(' ')[1];
+    }, 1000);
   </script>
 </body>
 </html>

@@ -3,302 +3,272 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>5602107 — Data Ecosystem &amp; Algorithmic Thinking (CSII)</title>
+  <title>5602107 Data Ecosystem and Algorithmic Thinking — Course Portal (S2 AY2026)</title>
   <style>
     :root {
       --bg-canvas: #f5f5f7;
-      --bg-glass: rgba(255, 255, 255, 0.90);
+      --bg-glass: rgba(255, 255, 255, 0.92);
       --ink-primary: #1d1d1f;
       --ink-secondary: #515154;
       --accent-blue: #0071e3;
-      --accent-soft: rgba(0, 113, 227, 0.10);
-      --success: #1d9630;
-      --success-soft: rgba(40, 205, 65, 0.12);
-      --warning: #bd6c00;
+      --accent-blue-soft: rgba(0, 113, 227, 0.10);
+      --success: #167c27;
+      --success-soft: rgba(40, 205, 65, 0.14);
+      --warning: #a15c00;
       --warning-soft: rgba(255, 149, 0, 0.14);
-      --danger: #d1281f;
+      --danger: #b91c1c;
       --danger-soft: rgba(255, 59, 48, 0.12);
-      --border: 1px solid rgba(0, 0, 0, 0.09);
-      --shadow: 0 14px 36px rgba(0, 0, 0, 0.05);
-      --font-sans: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Inter", sans-serif;
+      --border-hairline: 1px solid rgba(0, 0, 0, 0.09);
+      --shadow-ambient: 0 18px 44px rgba(0, 0, 0, 0.06), 0 1px 3px rgba(0, 0, 0, 0.04);
+      --font-display: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Inter", sans-serif;
       --font-mono: "SF Mono", "JetBrains Mono", Menlo, monospace;
+      --radius-xl: 22px;
+      --radius-md: 16px;
     }
-    * { box-sizing: border-box; }
+
+    *, *::before, *::after { box-sizing: border-box; }
     body {
-      margin: 0; padding: 32px 18px 64px 18px;
-      background: var(--bg-canvas); color: var(--ink-primary);
-      font-family: var(--font-sans);
+      margin: 0; padding: 0; background: var(--bg-canvas); color: var(--ink-primary);
+      font-family: var(--font-display); line-height: 1.5;
     }
-    .wrap { max-width: 1120px; margin: 0 auto; }
-    .hero {
-      background: var(--bg-glass); border: var(--border); border-radius: 22px;
-      padding: 2rem; box-shadow: var(--shadow); margin-bottom: 1.5rem;
+
+    .container { max-width: 1160px; margin: 0 auto; padding: 28px 18px 80px 18px; }
+    .hero-card {
+      background: var(--bg-glass); border: var(--border-hairline); border-radius: var(--radius-xl);
+      padding: 2rem; box-shadow: var(--shadow-ambient); margin-bottom: 1.75rem;
     }
     .eyebrow {
       display: inline-block; font-family: var(--font-mono); font-size: 0.72rem; font-weight: 700;
-      color: var(--accent-blue); background: var(--accent-soft); padding: 4px 10px; border-radius: 999px;
-      margin-bottom: 0.7rem;
+      letter-spacing: 0.05em; text-transform: uppercase; color: var(--accent-blue);
+      background: var(--accent-blue-soft); padding: 4px 11px; border-radius: 999px; margin-bottom: 0.65rem;
     }
-    h1 { margin: 0 0 0.45rem 0; font-size: clamp(1.6rem, 3vw, 2.2rem); letter-spacing: -0.03em; }
-    p { margin: 0; color: var(--ink-secondary); line-height: 1.55; }
-    .actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 1.15rem; }
-    .btn-link {
-      display: inline-flex; align-items: center; gap: 6px; padding: 9px 15px; border-radius: 999px;
-      font-size: 0.82rem; font-weight: 600; text-decoration: none;
-      background: var(--accent-blue); color: #ffffff;
+    h1 { font-size: clamp(1.6rem, 3vw, 2.2rem); letter-spacing: -0.03em; margin: 0 0 0.5rem 0; }
+    .hero-meta {
+      display: flex; flex-wrap: wrap; gap: 10px; margin-top: 1rem;
+      font-family: var(--font-mono); font-size: 0.75rem; color: var(--ink-secondary);
     }
-    .btn-link.secondary {
-      background: #ffffff; color: var(--ink-primary); border: var(--border);
+    .meta-pill {
+      background: #ffffff; border: var(--border-hairline); padding: 5px 11px; border-radius: 999px;
     }
-    .grid {
-      display: grid; grid-template-columns: repeat(auto-fill, minmax(310px, 1fr)); gap: 1rem;
+
+    .quick-launch {
+      display: flex; flex-wrap: wrap; gap: 10px; margin-top: 1.25rem;
     }
-    .card {
+    .launch-btn {
+      text-decoration: none; font-weight: 600; font-size: 0.85rem;
+      padding: 9px 16px; border-radius: 999px; background: var(--accent-blue); color: #ffffff;
+    }
+    .launch-btn.secondary {
+      background: #ffffff; color: var(--ink-primary); border: var(--border-hairline);
+    }
+
+    .week-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(310px, 1fr)); gap: 1.1rem;
+    }
+    .week-card {
       display: flex; flex-direction: column; justify-content: space-between;
-      text-decoration: none; color: inherit;
-      background: #ffffff; border: var(--border); border-radius: 16px;
-      padding: 1.25rem; box-shadow: 0 4px 14px rgba(0,0,0,0.03);
-      transition: transform 0.15s ease, border-color 0.15s ease;
+      background: var(--bg-glass); border: var(--border-hairline); border-radius: var(--radius-md);
+      padding: 1.3rem; text-decoration: none; color: inherit;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.03); transition: transform 0.16s ease, border-color 0.16s ease;
     }
-    .card.active-card:hover { transform: translateY(-2px); border-color: var(--accent-blue); }
-    .card.locked { opacity: 0.68; }
-    .card.holiday { background: #fffdf9; border-color: rgba(255, 149, 0, 0.28); }
-    .card.exam { background: #fffafa; border-color: rgba(255, 59, 48, 0.25); }
-    .card-top { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 6px; }
-    .wk { font-family: var(--font-mono); font-size: 0.72rem; font-weight: 700; color: var(--accent-blue); }
-    .pill {
-      font-family: var(--font-mono); font-size: 0.65rem; font-weight: 700;
-      padding: 2px 8px; border-radius: 999px; white-space: nowrap;
+    .week-card.active-week {
+      background: #ffffff; border: 1.5px solid rgba(0, 113, 227, 0.35);
     }
-    .pill-active { background: var(--success-soft); color: var(--success); }
-    .pill-upcoming { background: rgba(0,0,0,0.06); color: var(--ink-secondary); }
-    .pill-holiday { background: var(--warning-soft); color: var(--warning); }
-    .pill-exam { background: var(--danger-soft); color: var(--danger); }
-    .card h3 { margin: 4px 0 6px 0; font-size: 1.03rem; letter-spacing: -0.02em; }
-    .card p { font-size: 0.84rem; margin-bottom: 10px; }
-    .card-meta {
-      font-family: var(--font-mono); font-size: 0.7rem; color: var(--ink-secondary);
-      padding-top: 8px; border-top: 1px solid rgba(0,0,0,0.06);
+    .week-card.active-week:hover {
+      transform: translateY(-3px); border-color: var(--accent-blue);
+      box-shadow: 0 14px 30px rgba(0, 113, 227, 0.12);
+    }
+    .week-card.upcoming-week { opacity: 0.86; cursor: default; }
+    .week-card.holiday-week { background: rgba(255, 249, 238, 0.9); border-color: rgba(255, 149, 0, 0.3); }
+    .week-card.exam-week { background: rgba(255, 244, 244, 0.92); border-color: rgba(255, 59, 48, 0.28); }
+
+    .card-top {
+      display: flex; justify-content: space-between; align-items: center; gap: 8px;
+      font-family: var(--font-mono); font-size: 0.72rem; margin-bottom: 0.55rem;
+    }
+    .week-num { font-weight: 700; color: var(--accent-blue); }
+    .status-badge { font-weight: 700; padding: 2px 9px; border-radius: 999px; font-size: 0.68rem; }
+    .badge-live { background: var(--success-soft); color: var(--success); }
+    .badge-upcoming { background: rgba(0,0,0,0.06); color: var(--ink-secondary); }
+    .badge-holiday { background: var(--warning-soft); color: var(--warning); }
+    .badge-exam { background: var(--danger-soft); color: var(--danger); }
+
+    .week-card h3 { font-size: 1.04rem; margin: 0 0 0.45rem 0; letter-spacing: -0.02em; }
+    .week-card p { font-size: 0.83rem; color: var(--ink-secondary); margin: 0 0 0.85rem 0; }
+    .card-footer {
+      display: flex; justify-content: space-between; align-items: center;
+      padding-top: 0.65rem; border-top: 1px solid rgba(0,0,0,0.06);
+      font-family: var(--font-mono); font-size: 0.71rem; color: var(--ink-secondary);
     }
   </style>
 </head>
 <body>
-  <div class="wrap">
-    <div class="hero">
-      <div class="eyebrow">CHULALONGKORN SCHOOL OF INTEGRATED INNOVATION (CSII) // 5602107</div>
-      <h1>Data Ecosystem &amp; Algorithmic Thinking</h1>
-      <p>Complete 17-week interactive course portal (Second Semester AY 2026). Select an active weekly module for interactive Lecture notes, Hands-On Lab exercises, and Concept Quiz PDF receipts for <strong>MyCourseVille</strong> submission.</p>
-      <div class="actions">
-        <a class="btn-link" href="week01.html">Open Week 01 Module &rarr;</a>
-        <a class="btn-link" href="week02.html">Open Week 02 Module &rarr;</a>
+  <div class="container">
+    <header class="hero-card">
+      <div class="eyebrow">CHULALONGKORN SCHOOL OF INTEGRATED INNOVATION &bull; 5602107</div>
+      <h1>Data Ecosystem and Algorithmic Thinking</h1>
+      <p style="color: var(--ink-secondary); max-width: 780px; margin: 0;">
+        Second Semester AY 2026 (January – April 2027) &bull; Tuesdays 13:00–16:00, CSII Digital Auditorium &bull; Dr. Jing Tang.
+        Complete each weekly interactive lecture, hands-on lab, and randomized concept quiz, then upload your lab deliverables and PDF score receipt to <strong>MyCourseVille</strong>.
+      </p>
+      <div class="hero-meta">
+        <span class="meta-pill">3 Credits (3-0-6)</span>
+        <span class="meta-pill">17-Week Semester Roadmap</span>
+        <span class="meta-pill">Published Modules: Weeks 01–03</span>
+        <span class="meta-pill">LMS: MyCourseVille</span>
       </div>
-    </div>
-
-    <div class="grid">
-      <a class="card active-card" href="week01.html">
-        <div>
-          <div class="card-top">
-            <span class="wk">WEEK 01 // 05-JAN-27</span>
-            <span class="pill pill-active">ACTIVE</span>
-          </div>
-          <h3>Data Thinking for Startups &amp; Innovation</h3>
-          <p>Data &rarr; Information &rarr; Insight, cut-off thresholds, and Excel 365 conversion windows.</p>
-        </div>
-        <div class="card-meta">Lab: Excel 365 Startup Diagnostic // CLO 1</div>
-      </a>
-
-      <a class="card active-card" href="week02.html">
-        <div>
-          <div class="card-top">
-            <span class="wk">WEEK 02 // 12-JAN-27</span>
-            <span class="pill pill-active">ACTIVE</span>
-          </div>
-          <h3>Modern Data Ecosystems &amp; Data Flow</h3>
-          <p>Cloud DBs, APIs, warehouses, batch vs. near-real-time events, governance &amp; draw.io DFDs.</p>
-        </div>
-        <div class="card-meta">Lab: draw.io Architecture &amp; Governance // CLO 1</div>
-      </a>
-
-      <div class="card locked">
-        <div>
-          <div class="card-top">
-            <span class="wk">WEEK 03 // 19-JAN-27</span>
-            <span class="pill pill-upcoming">UPCOMING</span>
-          </div>
-          <h3>Data Structures, Relationships &amp; Formats</h3>
-          <p>CSV vs. JSON product event logs, primary/foreign keys, and entity-relationship modeling.</p>
-        </div>
-        <div class="card-meta">Lab: JSON-to-Table Mapping + Milestone 1 // CLO 1, 2</div>
+      <div class="quick-launch">
+        <a class="launch-btn" href="./week03.html">Open Week 03 (Latest) &rarr;</a>
+        <a class="launch-btn secondary" href="./week02.html">Week 02: Data Flow &amp; DFD</a>
+        <a class="launch-btn secondary" href="./week01.html">Week 01: Startup Data Thinking</a>
       </div>
+    </header>
 
-      <div class="card locked">
-        <div>
-          <div class="card-top">
-            <span class="wk">WEEK 04 // 26-JAN-27</span>
-            <span class="pill pill-upcoming">UPCOMING</span>
-          </div>
-          <h3>Relational &amp; Cloud Databases</h3>
-          <p>Supabase Table &amp; SQL Editor + SELECT, WHERE, DISTINCT in PostgreSQL Playground.</p>
-        </div>
-        <div class="card-meta">Lab: Supabase Cloud PostgreSQL Setup // CLO 2</div>
-      </div>
-
-      <div class="card locked">
-        <div>
-          <div class="card-top">
-            <span class="wk">WEEK 05 // 02-FEB-27</span>
-            <span class="pill pill-upcoming">UPCOMING</span>
-          </div>
-          <h3>Business Metrics &amp; SQL Aggregation</h3>
-          <p>COUNT, SUM, AVG, GROUP BY, HAVING, ORDER BY and Excel count reconciliation.</p>
-        </div>
-        <div class="card-meta">Lab: Startup KPI SQL Aggregation // CLO 2</div>
-      </div>
-
-      <div class="card locked">
-        <div>
-          <div class="card-top">
-            <span class="wk">WEEK 06 // 09-FEB-27</span>
-            <span class="pill pill-upcoming">UPCOMING</span>
-          </div>
-          <h3>Data Integration &amp; Joins</h3>
-          <p>INNER JOIN &amp; LEFT JOIN integrity checks, duplicate audits, and Milestone 2 snapshot.</p>
-        </div>
-        <div class="card-meta">Lab: Multi-Table Join Audit + Milestone 2 // CLO 2</div>
-      </div>
-
-      <div class="card locked">
-        <div>
-          <div class="card-top">
-            <span class="wk">WEEK 07 // 16-FEB-27</span>
-            <span class="pill pill-upcoming">UPCOMING</span>
-          </div>
-          <h3>Data Quality, Cleaning &amp; Preparation</h3>
-          <p>Missing values, duplicates, schema validation, and cleaning rules before analytics.</p>
-        </div>
-        <div class="card-meta">Lab: Dirty Startup Dataset Audit &amp; Clean // CLO 2, 3</div>
-      </div>
-
-      <div class="card exam">
-        <div>
-          <div class="card-top">
-            <span class="wk">WEEK 08 // 23-FEB-27</span>
-            <span class="pill pill-exam">MIDTERM WEEK</span>
-          </div>
-          <h3>Midterm Examination Period</h3>
-          <p>No regular lecture. Comprehensive review of Data Ecosystems, DFDs, Schemas, and SQL.</p>
-        </div>
-        <div class="card-meta">Midterm Assessment // CLO 1, 2</div>
-      </div>
-
-      <div class="card locked">
-        <div>
-          <div class="card-top">
-            <span class="wk">WEEK 09 // 02-MAR-27</span>
-            <span class="pill pill-upcoming">UPCOMING</span>
-          </div>
-          <h3>Algorithmic Thinking &amp; Decision Logic</h3>
-          <p>Conditionals, loops, threshold rules, and pseudocode for automated business decisions.</p>
-        </div>
-        <div class="card-meta">Lab: Flowchart &amp; Rule-Engine Design // CLO 3</div>
-      </div>
-
-      <div class="card locked">
-        <div>
-          <div class="card-top">
-            <span class="wk">WEEK 10 // 09-MAR-27</span>
-            <span class="pill pill-upcoming">UPCOMING</span>
-          </div>
-          <h3>Python Data Workflows in Google Colab</h3>
-          <p>Loading CSV/JSON files with pandas, filtering records, and reproducible notebook pipelines.</p>
-        </div>
-        <div class="card-meta">Lab: Google Colab pandas Foundations // CLO 3</div>
-      </div>
-
-      <div class="card locked">
-        <div>
-          <div class="card-top">
-            <span class="wk">WEEK 11 // 16-MAR-27</span>
-            <span class="pill pill-upcoming">UPCOMING</span>
-          </div>
-          <h3>Startup Funnel &amp; Retention Diagnostics</h3>
-          <p>Activation, conversion rates, cohort retention, and churn segmentation in Python.</p>
-        </div>
-        <div class="card-meta">Lab: Funnel &amp; Cohort Notebook + Milestone 3 // CLO 3, 4</div>
-      </div>
-
-      <div class="card locked">
-        <div>
-          <div class="card-top">
-            <span class="wk">WEEK 12 // 23-MAR-27</span>
-            <span class="pill pill-upcoming">UPCOMING</span>
-          </div>
-          <h3>Visual Storytelling &amp; Executive Dashboards</h3>
-          <p>Choosing the right visual encoding with seaborn/matplotlib and avoiding misleading charts.</p>
-        </div>
-        <div class="card-meta">Lab: Investor-Ready Visual Brief // CLO 4</div>
-      </div>
-
-      <div class="card locked">
-        <div>
-          <div class="card-top">
-            <span class="wk">WEEK 13 // 30-MAR-27</span>
-            <span class="pill pill-upcoming">UPCOMING</span>
-          </div>
-          <h3>Data Governance, Privacy &amp; Thailand PDPA</h3>
-          <p>Consent, data minimization, PII anonymization, RBAC, and ethical AI/data boundaries.</p>
-        </div>
-        <div class="card-meta">Lab: PDPA Compliance &amp; Risk Audit // CLO 1, 4</div>
-      </div>
-
-      <div class="card holiday">
-        <div>
-          <div class="card-top">
-            <span class="wk">WEEK 14 // 06-APR-27</span>
-            <span class="pill pill-holiday">PUBLIC HOLIDAY</span>
-          </div>
-          <h3>Chakri Memorial Day (No Class)</h3>
-          <p>National public holiday. Asynchronous project clinic and make-up consultation slot.</p>
-        </div>
-        <div class="card-meta">Make-up Placeholder // Team Project Coaching</div>
-      </div>
-
-      <div class="card holiday">
-        <div>
-          <div class="card-top">
-            <span class="wk">WEEK 15 // 13-APR-27</span>
-            <span class="pill pill-holiday">SONGKRAN HOLIDAY</span>
-          </div>
-          <h3>Songkran Festival (No Class)</h3>
-          <p>Thai New Year holiday break. Teams finalize Capstone Milestone 4 deliverables.</p>
-        </div>
-        <div class="card-meta">Make-up Placeholder // Capstone Prep</div>
-      </div>
-
-      <div class="card exam">
-        <div>
-          <div class="card-top">
-            <span class="wk">WEEK 16 // 20-APR-27</span>
-            <span class="pill pill-exam">PRACTICAL LAB EXAM</span>
-          </div>
-          <h3>Final Practical Lab Exam &amp; Capstone Demo</h3>
-          <p>Hands-on practical assessment (SQL + Python diagnostics) and startup data pitch.</p>
-        </div>
-        <div class="card-meta">Final Practical Exam + Milestone 4 // CLO 1–4</div>
-      </div>
-
-      <div class="card exam">
-        <div>
-          <div class="card-top">
-            <span class="wk">WEEK 17 // 27-APR-27</span>
-            <span class="pill pill-exam">FINAL EXAM WEEK</span>
-          </div>
-          <h3>Final Written Examination</h3>
-          <p>Comprehensive written examination covering end-to-end data ecosystems and algorithmic thinking.</p>
-        </div>
-        <div class="card-meta">Final Written Assessment // CLO 1–4</div>
-      </div>
-    </div>
+    <main class="week-grid" id="semester-grid"></main>
   </div>
+
+  <script>
+    const WEEKS = [
+      {
+        num: "WEEK 01", date: "05-Jan-27", status: "live", href: "./week01.html",
+        title: "Data Thinking for Startups & Innovation",
+        desc: "Lab: Use an Excel structured table to calculate conversion. Define the event, denominator, and time window.",
+        clos: "CLO1, CLO2"
+      },
+      {
+        num: "WEEK 02", date: "12-Jan-27", status: "live", href: "./week02.html",
+        title: "Modern Data Ecosystems & Data Flow",
+        desc: "Lab: Map a startup data flow in draw.io. Identify cloud DB, API, warehouse, batch vs. near-real-time, and access controls.",
+        clos: "CLO1"
+      },
+      {
+        num: "WEEK 03", date: "19-Jan-27", status: "live", href: "./week03.html",
+        title: "Data Structures, Relationships & Formats",
+        desc: "Lab: Compare CSV & JSON event logs. Model users, orders & events in Excel/draw.io. Milestone 1: metric, data map & schema.",
+        clos: "CLO1, CLO2"
+      },
+      {
+        num: "WEEK 04", date: "26-Jan-27", status: "upcoming",
+        title: "Relational and Cloud Databases",
+        desc: "Lab: Explore instructor-provisioned sample data in Supabase Table Editor & SQL Editor. Practice SELECT, WHERE & DISTINCT.",
+        clos: "CLO2, CLO3"
+      },
+      {
+        num: "WEEK 05", date: "02-Feb-27", status: "upcoming",
+        title: "Business Metrics and SQL Aggregation",
+        desc: "Lab: Use COUNT, SUM, AVG, GROUP BY, HAVING & ORDER BY in PostgreSQL Playground. Reconcile revenue by channel with Excel.",
+        clos: "CLO3, CLO5"
+      },
+      {
+        num: "WEEK 06", date: "09-Feb-27", status: "upcoming",
+        title: "Data Integration and Joins",
+        desc: "Lab: Practice INNER JOIN & LEFT JOIN in PostgreSQL. Check unmatched users & duplicates. Milestone 2: SQL & checked CSV snapshot.",
+        clos: "CLO2, CLO3"
+      },
+      {
+        num: "WEEK 07", date: "16-Feb-27", status: "upcoming",
+        title: "Algorithmic Thinking & Business Decision Logic",
+        desc: "Lab: Draw and trace a threshold rule and short loop. Verify AI-generated SQL against hand-calculated results. Midterm review.",
+        clos: "CLO2–CLO4"
+      },
+      {
+        num: "WEEK 08", date: "23-Feb-27", status: "exam",
+        title: "Midterm Written Examination",
+        desc: "Closed-book written exam covering data ecosystems, relational schemas, SQL queries on paper, and algorithm tracing.",
+        clos: "20% Grade"
+      },
+      {
+        num: "WEEK 09", date: "02-Mar-27", status: "upcoming",
+        title: "Python Notebooks, APIs and JSON",
+        desc: "Lab: Load Week 6 CSV in Google Colab. Inspect and filter a pandas DataFrame and parse a public API / saved JSON payload.",
+        clos: "CLO3, CLO4"
+      },
+      {
+        num: "WEEK 10", date: "09-Mar-27", status: "upcoming",
+        title: "Data Cleaning, Quality & Reproducibility",
+        desc: "Lab: Use pandas to check types, missing values & duplicates. Milestone 3: rerunnable cleaning notebook and quality log.",
+        clos: "CLO2, CLO4–CLO6"
+      },
+      {
+        num: "WEEK 11", date: "16-Mar-27", status: "upcoming",
+        title: "Descriptive & Diagnostic Product Analytics",
+        desc: "Lab: Use pandas to compare funnel conversion and retention across defined cohorts and time windows.",
+        clos: "CLO5"
+      },
+      {
+        num: "WEEK 12", date: "23-Mar-27", status: "upcoming",
+        title: "Visualization & Evidence-Based Storytelling",
+        desc: "Lab: Create a labeled chart in Excel or seaborn. Compare chart encodings and document analytical limitations.",
+        clos: "CLO5"
+      },
+      {
+        num: "WEEK 13", date: "30-Mar-27", status: "upcoming",
+        title: "Predictive Thinking & Integrated Data Pipeline",
+        desc: "Lab: Compute moving averages & test decision rules. Milestone 4: submit SQL, data snapshot, notebook, chart & recommendation.",
+        clos: "CLO1–CLO6"
+      },
+      {
+        num: "WEEK 14", date: "06-Apr-27", status: "holiday",
+        title: "No Class — Chakri Memorial Day",
+        desc: "National public holiday (make-up session to be scheduled if required).",
+        clos: "Holiday"
+      },
+      {
+        num: "WEEK 15", date: "13-Apr-27", status: "holiday",
+        title: "No Class — Songkran Festival",
+        desc: "National public holiday (make-up session to be scheduled if required).",
+        clos: "Holiday"
+      },
+      {
+        num: "WEEK 16", date: "20-Apr-27", status: "exam",
+        title: "Final Practical Lab Examination",
+        desc: "Independent end-to-end data pipeline build in an approved controlled environment.",
+        clos: "10% Grade"
+      },
+      {
+        num: "WEEK 17", date: "27-Apr-27", status: "exam",
+        title: "Final Written Examination",
+        desc: "Comprehensive, closed-book written examination across all course learning outcomes.",
+        clos: "20% Grade"
+      }
+    ];
+
+    const grid = document.getElementById('semester-grid');
+    grid.innerHTML = WEEKS.map(w => {
+      const isLive = w.status === 'live';
+      const cardClass = isLive ? 'week-card active-week'
+        : w.status === 'holiday' ? 'week-card holiday-week'
+        : w.status === 'exam' ? 'week-card exam-week'
+        : 'week-card upcoming-week';
+
+      const badgeClass = isLive ? 'status-badge badge-live'
+        : w.status === 'holiday' ? 'status-badge badge-holiday'
+        : w.status === 'exam' ? 'status-badge badge-exam'
+        : 'status-badge badge-upcoming';
+
+      const badgeText = isLive ? 'OPEN MODULE →'
+        : w.status === 'holiday' ? 'PUBLIC HOLIDAY'
+        : w.status === 'exam' ? 'EXAMINATION'
+        : 'UPCOMING';
+
+      const tag = isLive ? 'a' : 'div';
+      const hrefAttr = isLive ? ` href="${w.href}"` : '';
+
+      return `<${tag} class="${cardClass}"${hrefAttr}>
+        <div>
+          <div class="card-top">
+            <span class="week-num">${w.num} &bull; ${w.date}</span>
+            <span class="${badgeClass}">${badgeText}</span>
+          </div>
+          <h3>${w.title}</h3>
+          <p>${w.desc}</p>
+        </div>
+        <div class="card-footer">
+          <span>${w.clos}</span>
+          <span>${isLive ? 'Lecture &bull; Lab &bull; Quiz' : w.date}</span>
+        </div>
+      </${tag}>`;
+    }).join('');
+  </script>
 </body>
 </html>
