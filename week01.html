@@ -6,9 +6,6 @@
   <title>Week 01 — Data Thinking for Startups & Innovation | 5602107</title>
   <link rel="canonical" href="https://jingt-chula.github.io/data-ecosystem/week01.html">
 
-  <!-- Google Identity Services -->
-  <script src="https://accounts.google.com/gsi/client" async defer></script>
-
   <!-- MathJax LaTeX (CHTML with strict inline rendering & startup typeset) -->
   <script>
     window.MathJax = {
@@ -287,9 +284,6 @@
   {
     "weekId": "WEEK_01",
     "courseCode": "5602107",
-    "appsScriptUrl": "https://script.google.com/a/macros/chula.ac.th/s/AKfycbw334J8G3WR8Tk_tJZFctdFipR_VUKFbfubHh9-rqgm40aVc4YoeQLbeIsQwR9aBlUZtw/exec",
-    "googleSheetUrl": "https://docs.google.com/spreadsheets/d/1_uObrNze7wsiipnf0CkhGJK7DwJhSxk1Z8TvqAPuwlk/edit?usp=sharing",
-    "googleClientId": "",
     "questions": [
       {
         "id": "W01_Q1",
@@ -377,7 +371,6 @@
       <span id="hud-name">Guest Student</span>
       <span class="hud-score-badge" id="hud-score">0 / 6</span>
       <span id="hud-bkk-clock">BKK --:--</span>
-      <a class="hud-btn instructor-only" href="https://docs.google.com/spreadsheets/d/1_uObrNze7wsiipnf0CkhGJK7DwJhSxk1Z8TvqAPuwlk/edit?usp=sharing" target="_blank" rel="noopener" style="background:#0071e3; text-decoration:none;">Gradebook &nearr;</a>
       <button class="hud-btn instructor-only" id="btn-toggle-edit" onclick="toggleInstructorEdit()">Edit</button>
       <button class="hud-btn instructor-only" id="btn-export-html" onclick="exportCleanHtml()">Export HTML</button>
     </div>
@@ -720,12 +713,10 @@ Hi team, my parcel arrived late...</pre>
     <!-- ==================== TAB 3: CONCEPT QUIZ ==================== -->
     <section class="tab-panel" id="panel-quiz">
       <div class="glass-card" style="max-width: 700px; margin: 0 auto 1.25rem auto;">
-        <div class="eyebrow">ATTENDANCE &amp; CONCEPT CHECK (10 MINS)</div>
-        <h2>Student Verification &amp; Randomized Quiz</h2>
-        <p style="font-size:0.86rem;">Sign in with your Google Account or enter your Name and Student ID below. Questions and options are shuffled uniquely per student.</p>
-        <div id="g_id_onload" data-client_id="" data-callback="handleGoogleLogin" data-auto_prompt="false"></div>
-        <div class="g_id_signin" data-type="standard" data-size="large" data-theme="outline" data-text="sign_in_with" data-shape="pill"></div>
-        <div style="margin-top: 12px;">
+        <div class="eyebrow">CONCEPT CHECK &amp; MYCOURSEVILLE SUBMISSION (10 MINS)</div>
+        <h2>Student Details &amp; Randomized Quiz</h2>
+        <p style="font-size:0.86rem;">Enter your Full Name and Student ID below. Questions and options are shuffled uniquely per student. After answering, download your PDF receipt and upload it to <strong>MyCourseVille</strong>.</p>
+        <div style="margin-top: 10px;">
           <label style="font-family: var(--font-mono); font-size: 0.72rem; font-weight: 700;">FULL NAME</label>
           <input type="text" id="input-name" class="apple-input" placeholder="e.g., Niran Wattana" oninput="syncStudent()">
           <label style="font-family: var(--font-mono); font-size: 0.72rem; font-weight: 700;">STUDENT ID</label>
@@ -737,14 +728,14 @@ Hi team, my parcel arrived late...</pre>
 
       <div class="glass-card" id="slide-review" style="max-width: 700px; margin: 1.25rem auto 0 auto;">
         <div class="eyebrow">FINAL ASSESSMENT RECEIPT</div>
-        <h2>Personal Score Summary &amp; Receipt</h2>
+        <h2>Personal Score Summary &amp; PDF Receipt</h2>
         <div id="review-meta" style="font-family: var(--font-mono); font-size: 0.8rem; margin-bottom: 0.75rem; color: var(--ink-secondary);"></div>
         <div id="review-score-banner" style="font-size: 1.45rem; font-weight: 800; color: var(--accent-blue); margin-bottom: 0.75rem;"></div>
         <div id="review-breakdown" style="font-size: 0.85rem; margin-bottom: 0.85rem;"></div>
-        <div id="submission-status-msg" style="font-family: var(--font-mono); font-size: 0.76rem; color: var(--ink-secondary); margin-bottom: 0.75rem;"></div>
+        <div id="submission-status-msg" style="font-family: var(--font-mono); font-size: 0.78rem; color: var(--ink-secondary); margin-bottom: 0.75rem;"></div>
 
         <div class="no-print" style="margin-top: 12px;">
-          <button class="primary-btn" onclick="submitAndDownloadPDF()">Submit Attendance &amp; Download PDF Receipt</button>
+          <button class="primary-btn" onclick="downloadReceiptPDF()">Download PDF Receipt for MyCourseVille</button>
           <button class="secondary-btn" style="width:100%; margin-top:8px;" onclick="window.print()">Print / Save Personal Review Sheet</button>
         </div>
       </div>
@@ -1019,18 +1010,7 @@ Hi team, my parcel arrived late...</pre>
       shuffledOptions: shuffleArray(q.options)
     }));
 
-    const studentState = { name: '', studentId: '', email: 'unverified@student.local', answers: {} };
-
-    function handleGoogleLogin(response) {
-      try {
-        const payload = JSON.parse(atob(response.credential.split('.')[1]));
-        studentState.email = payload.email || studentState.email;
-        if (payload.name && !document.getElementById('input-name').value) {
-          document.getElementById('input-name').value = payload.name;
-        }
-        syncStudent();
-      } catch (e) {}
-    }
+    const studentState = { name: '', studentId: '', answers: {} };
 
     function syncStudent() {
       studentState.name = document.getElementById('input-name').value.trim();
@@ -1083,7 +1063,7 @@ Hi team, my parcel arrived late...</pre>
       const total = shuffledQuestions.length;
       const correctCount = Object.values(studentState.answers).filter(a => a.correct).length;
       document.getElementById('review-meta').textContent =
-        'Student: ' + (studentState.name || 'Not entered') + ' | ID: ' + (studentState.studentId || 'Not entered') + ' | Email: ' + studentState.email;
+        'Student: ' + (studentState.name || 'Not entered') + ' | Student ID: ' + (studentState.studentId || 'Not entered');
       document.getElementById('review-score-banner').textContent = 'Your Score: ' + correctCount + ' / ' + total;
       document.getElementById('review-breakdown').innerHTML = shuffledQuestions.map((q, i) => {
         const ans = studentState.answers[q.id];
@@ -1092,55 +1072,47 @@ Hi team, my parcel arrived late...</pre>
       }).join('');
     }
 
-    async function submitAndDownloadPDF() {
+    function downloadReceiptPDF() {
+      const name = studentState.name;
+      const sid = studentState.studentId;
+      const statusEl = document.getElementById('submission-status-msg');
+
+      if (!name || !sid) {
+        statusEl.style.color = '#b91c1c';
+        statusEl.textContent = 'Please enter both your Full Name and Student ID above before downloading your PDF receipt.';
+        document.getElementById('input-name').focus();
+        return;
+      }
+
       const bkkTime = getBangkokNowString();
       const total = shuffledQuestions.length;
       const correctCount = Object.values(studentState.answers).filter(a => a.correct).length;
-      const payload = {
-        weekId: CONFIG.weekId,
-        bangkokTime: bkkTime,
-        email: studentState.email,
-        name: studentState.name || 'Anonymous',
-        studentId: studentState.studentId || 'NO_ID',
-        score: correctCount + '/' + total,
-        questionOrder: shuffledQuestions.map(q => q.id).join(','),
-        answers: JSON.stringify(studentState.answers)
-      };
+      const qOrder = shuffledQuestions.map(q => q.id).join(', ');
 
-      const scriptUrl = (CONFIG.appsScriptUrl || '').trim();
-      const statusEl = document.getElementById('submission-status-msg');
-      if (scriptUrl && scriptUrl.startsWith('http')) {
-        statusEl.style.color = '#0071e3';
-        statusEl.textContent = 'Submitting attendance & score...';
-        try {
-          await fetch(scriptUrl, {
-            method: 'POST', mode: 'no-cors',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(payload)
-          });
-          statusEl.style.color = '#167c27';
-          statusEl.textContent = 'Recorded at ' + bkkTime + ' — PDF receipt downloaded.';
-        } catch (err) {
-          statusEl.style.color = '#b91c1c';
-          statusEl.textContent = 'Saved locally at ' + bkkTime + ' — PDF receipt downloaded.';
-        }
-      } else {
-        statusEl.style.color = '#167c27';
-        statusEl.textContent = 'Completed at ' + bkkTime + ' — PDF receipt downloaded.';
-      }
+      statusEl.style.color = '#167c27';
+      statusEl.textContent = 'PDF receipt generated at ' + bkkTime + ' — please upload this PDF to MyCourseVille.';
 
       if (window.jspdf && window.jspdf.jsPDF) {
         const doc = new window.jspdf.jsPDF();
         doc.setFontSize(16);
         doc.text('5602107 Data Ecosystem — Week 01 Score Receipt', 16, 22);
         doc.setFontSize(11);
-        doc.text('Student Name: ' + payload.name, 16, 36);
-        doc.text('Student ID: ' + payload.studentId, 16, 44);
-        doc.text('Google Account: ' + payload.email, 16, 52);
-        doc.text('Completion Time: ' + bkkTime, 16, 60);
-        doc.text('Personal Score: ' + payload.score, 16, 68);
-        doc.text('Question Sequence: ' + payload.questionOrder, 16, 76);
-        doc.save('5602107_WEEK_01_' + payload.studentId + '_Bangkok.pdf');
+        doc.text('Student Name: ' + name, 16, 36);
+        doc.text('Student ID: ' + sid, 16, 44);
+        doc.text('Completion Time: ' + bkkTime, 16, 52);
+        doc.text('Personal Score: ' + correctCount + ' / ' + total, 16, 60);
+        doc.text('Question Sequence: ' + qOrder, 16, 68);
+
+        let y = 82;
+        doc.setFontSize(10);
+        shuffledQuestions.forEach((q, idx) => {
+          const ans = studentState.answers[q.id];
+          const verdict = !ans ? 'UNANSWERED' : (ans.correct ? 'CORRECT' : 'INCORRECT');
+          doc.text('Q' + (idx + 1) + ' [' + q.id + ']: ' + verdict, 16, y);
+          y += 7;
+        });
+
+        doc.save('5602107_WEEK_01_' + sid + '_Receipt.pdf');
       }
     }
 
